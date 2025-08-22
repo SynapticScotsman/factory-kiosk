@@ -1,0 +1,92 @@
+[
+  {
+    "topic": "agv",
+    "text": "AGV & SVG<br>Tracking",
+    "top": "60%",
+    "left": "12%",
+    "angle": -138,
+    "length": 256,
+    "category": "productivity"
+  },
+  {
+    "topic": "pick-place",
+    "text": "Pick & Place",
+    "top": "75%",
+    "left": "22%",
+    "angle": -45,
+    "length": 120,
+    "category": "productivity"
+  },
+  {
+    "topic": "conveyor",
+    "text": "Conveyor Speed<br>Measurement",
+    "top": "70%",
+    "left": "60%",
+    "angle": -135,
+    "length": 120,
+    "category": "productivity"
+  },
+  {
+    "topic": "barcode",
+    "text": "Barcode<br>Localization",
+    "top": "68%",
+    "left": "75%",
+    "angle": -135,
+    "length": 120,
+    "category": "productivity"
+  },
+  {
+    "topic": "area-monitoring",
+    "text": "Area<br>Monitoring",
+    "top": "48%",
+    "left": "28%",
+    "angle": 45,
+    "length": 120,
+    "category": "safety"
+  },
+  {
+    "topic": "spatter",
+    "text": "Spatter<br>Monitoring",
+    "top": "78%",
+    "left": "48%",
+    "angle": 180,
+    "length": 120,
+    "category": "safety"
+  },
+  {
+    "topic": "fluid-dynamics",
+    "text": "Fluid Dynamics<br>Monitoring",
+    "top": "20%",
+    "left": "80%",
+    "angle": -135,
+    "length": 120,
+    "category": "safety"
+  },
+  {
+    "topic": "particle-size",
+    "text": "Particle Size<br>Monitoring",
+    "top": "30%",
+    "left": "60%",
+    "angle": -45,
+    "length": 120,
+    "category": "quality"
+  },
+  {
+    "topic": "high-speed",
+    "text": "High-Speed<br>Counting",
+    "top": "50%",
+    "left": "88%",
+    "angle": -90,
+    "length": 120,
+    "category": "quality"
+  },
+  {
+    "topic": "vibration",
+    "text": "Vibration<br>Measurement",
+    "top": "35%",
+    "left": "45%",
+    "angle": 45,
+    "length": 120,
+    "category": "predictive-maintenance"
+  }
+]

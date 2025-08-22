@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Smart Factory</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f0f2f5; margin: 0; padding: 1rem; }
+        .factory-container { position: relative; max-width: 1400px; width: 100%; margin: auto; border-radius: 1rem; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .factory-image { display: block; width: 100%; height: auto; }
+        .hotspot { position: absolute; width: 110px; height: 110px; border-radius: 50%; cursor: pointer; transform: translate(-50%, -50%); display: flex; flex-direction: column; justify-content: flex-end; align-items: center; text-align: center; color: white; font-weight: 600; line-height: 1.2; text-transform: uppercase; border: 2px solid rgba(255, 255, 255, 0.7); box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: transform 0.3s ease; padding-bottom: 25px; box-sizing: border-box; }
+        .hotspot:hover { transform: translate(-50%, -50%) scale(1.05); }
+        .camera-icon { position: absolute; width: 75px; height: 75px; top: -38px; left: 50%; transform: translateX(-50%); filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3)); pointer-events: none; }
+        .hotspot-text { font-size: 0.8rem; }
+        .hotspot.productivity { background-color: #4A90E2; }
+        .hotspot.safety { background-color: #f56565; }
+        .hotspot.quality { background-color: #ed64a6; }
+        .hotspot.predictive-maintenance { background-color: #4a5568; }
+        .hotspot::before { content: ''; position: absolute; top: 50%; left: 50%; width: 60px; height: var(--spotlight-length); z-index: -1; pointer-events: none; transform-origin: top center; transform: translateX(-50%) rotate(var(--spotlight-angle)); clip-path: polygon(50% 0%, 0% 100%, 100% 100%); }
+        .hotspot.productivity::before { background: linear-gradient(to bottom, rgba(74, 144, 226, 0.7) 0%, rgba(74, 144, 226, 0) 100%); }
+        .hotspot.safety::before { background: linear-gradient(to bottom, rgba(245, 101, 101, 0.7) 0%, rgba(245, 101, 101, 0) 100%); }
+        .hotspot.quality::before { background: linear-gradient(to bottom, rgba(237, 100, 166, 0.7) 0%, rgba(237, 100, 166, 0) 100%); }
+        .hotspot.predictive-maintenance::before { background: linear-gradient(to bottom, rgba(74, 85, 104, 0.7) 0%, rgba(74, 85, 104, 0) 100%); }
+        .modal { position: fixed; top: 0; left: 50%; transform: translate(-50%, -100%) scale(0.9); opacity: 0; visibility: hidden; transition: transform 0.4s ease, opacity 0.4s ease, visibility 0.4s; z-index: 100; background-color: white; border-radius: 1rem; width: 90%; max-width: 500px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); }
+        .modal.active { transform: translate(-50%, 50%); opacity: 1; visibility: visible; }
+        .modal-header { padding: 1.5rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; }
+        .modal-header h2 { margin: 0; font-size: 1.25rem; font-weight: 600; color: #2d3748; }
+        .modal-body { padding: 1.5rem; color: #4a5568; line-height: 1.6; }
+        .modal-footer { padding: 1rem 1.5rem; background-color: #f7fafc; border-top: 1px solid #e2e8f0; border-bottom-left-radius: 1rem; border-bottom-right-radius: 1rem; text-align: right; }
+        .learn-more-button { background-color: #3182ce; color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background-color 0.2s ease; }
+        .learn-more-button:hover { background-color: #2b6cb0; }
+        .close-button { cursor: pointer; font-size: 1.75rem; font-weight: bold; border: none; background: none; color: #718096; transition: color 0.2s ease; }
+        .close-button:hover { color: #2d3748; }
+        #overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.6); opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s; z-index: 99; }
+        #overlay.active { opacity: 1; visibility: visible; }
+        .details-page { display: none; max-width: 900px; margin: 2rem auto; padding: 2rem; background-color: white; border-radius: 1rem; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .details-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 1rem; margin-bottom: 1.5rem; }
+        .details-header h2 { margin: 0; font-size: 1.75rem; font-weight: 700; color: #2d3748; }
+        .back-button { background-color: #e2e8f0; color: #4a5568; border: none; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background-color 0.2s ease; }
+        .back-button:hover { background-color: #cbd5e0; }
+        .details-content p { color: #4a5568; line-height: 1.6; font-size: 1.1rem; }
+        .media-container { margin-top: 2rem; width: 100%; background-color: #f7fafc; border: 1px dashed #e2e8f0; border-radius: 8px; padding: 1rem; text-align: center; color: #a0aec0; }
+        .media-container iframe, .media-container img { max-width: 100%; border-radius: 8px; }
+        .gemini-feature { margin-top: 2rem; border-top: 1px solid #e2e8f0; padding-top: 1.5rem; }
+        .gemini-button { background: linear-gradient(45deg, #4299e1, #9f7aea); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease; display: block; margin: 0 auto 1rem auto; }
+        .gemini-button:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .gemini-loader { border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 1rem auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .gemini-response { margin-top: 1rem; background-color: #f7fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.5rem; color: #4a5568; white-space: pre-wrap; line-height: 1.7; }
+        @keyframes fadeIn-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .content-fade-in { animation: fadeIn-up 0.6s ease-out forwards; }
+    </style>
+</head>
+<body>
+
+    <main id="app-container">
+        <div class="factory-container" id="factory-view">
+            <img src="Industrial_Visual_EVK4_BG.jpg" alt="Industrial Factory Layout" class="factory-image" onerror="this.onerror=null;this.src='https://placehold.co/1400x788/cccccc/ffffff?text=Factory+Image+Not+Found';">
+            <!-- Hotspots will be generated by JavaScript from config.json -->
+        </div>
+        
+        <div class="modal" id="details-modal">
+            <div class="modal-header"> <h2 id="modal-title"></h2> <button class="close-button">&times;</button> </div>
+            <div class="modal-body"> <p id="modal-description"></p> </div>
+            <div class="modal-footer"> <button class="learn-more-button" id="learn-more"></button> </div>
+        </div>
+        <div id="overlay"></div>
+
+        <div class="details-page" id="details-view">
+            <div class="details-header"> <h2 id="details-title"></h2> <button class="back-button" id="back-to-factory">← Back to Factory</button> </div>
+            <div class="details-content">
+                <p id="details-description"></p>
+                <div class="media-container" id="details-media"></div>
+                <div class="gemini-feature">
+                    <button class="gemini-button" id="gemini-optimize-button">✨ Suggest Optimizations</button>
+                    <div class="gemini-loader" id="gemini-loader" style="display: none;"></div>
+                    <div class="gemini-response" id="gemini-response"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const factoryContainer = document.getElementById('factory-view');
+        const videoEmbedCode = '<iframe width="100%" height="450" src="https://www.youtube.com/embed/UAnSuj0zZ3Y" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>';
+
+        const contentData = {
+            'agv': { title: 'AGV & SVG Tracking', description: 'Boost your logistical efficiency...', media: videoEmbedCode },
+            'pick-place': { title: 'Pick & Place', description: 'Achieve unparalleled speed and accuracy...', media: videoEmbedCode },
+            'conveyor': { title: 'Conveyor Speed Measurement', description: 'Synchronize your entire production line...', media: videoEmbedCode },
+            'barcode': { title: 'Barcode Localization', description: 'Never miss a scan...', media: videoEmbedCode },
+            'area-monitoring': { title: 'Area Monitoring', description: 'Protect your most valuable asset: your people...', media: videoEmbedCode },
+            'spatter': { title: 'Spatter Monitoring', description: 'Ensure both quality and safety...', media: videoEmbedCode },
+            'fluid-dynamics': { title: 'Fluid Dynamics Monitoring', description: 'Prevent hazardous spills and system failures...', media: videoEmbedCode },
+            'particle-size': { title: 'Particle Size Monitoring', description: 'Consistency is key to quality...', media: videoEmbedCode },
+            'high-speed': { title: 'High-Speed Counting', description: 'Achieve 100% accuracy in inventory and packaging...', media: videoEmbedCode },
+            'vibration': { title: 'Vibration Measurement', description: 'Prevent downtime before it happens...', media: videoEmbedCode }
+        };
+
+        // --- Load Hotspots from Configuration File ---
+        async function loadHotspots() {
+            try {
+                const response = await fetch('config.json');
+                if (!response.ok) {
+                    throw new Error('config.json not found. Please create it using the editor.html tool.');
+                }
+                const hotspotData = await response.json();
+                
+                hotspotData.forEach(data => {
+                    const hotspot = document.createElement('button');
+                    hotspot.className = `hotspot ${data.category}`;
+                    hotspot.style.top = data.top;
+                    hotspot.style.left = data.left;
+                    hotspot.style.setProperty('--spotlight-angle', `${data.angle}deg`);
+                    hotspot.style.setProperty('--spotlight-length', `${data.length}px`);
+                    hotspot.dataset.topic = data.topic;
+                    hotspot.innerHTML = `<img src="camera-icon.png" class="camera-icon"><div class="hotspot-text">${data.text}</div>`;
+                    factoryContainer.appendChild(hotspot);
+                });
+                
+                // Add event listeners after hotspots are created
+                addHotspotListeners();
+
+            } catch (error) {
+                console.error("Error loading configuration:", error);
+                const errorMsg = document.createElement('p');
+                errorMsg.textContent = 'Error: Could not load config.json. Make sure the file exists in the same folder.';
+                errorMsg.style.color = 'red';
+                errorMsg.style.textAlign = 'center';
+                factoryContainer.appendChild(errorMsg);
+            }
+        }
+
+        // --- JavaScript for Page Navigation & Modals (and other logic) ---
+        const detailsView = document.getElementById('details-view');
+        const backButton = document.getElementById('back-to-factory');
+        const modal = document.getElementById('details-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalDescription = document.getElementById('modal-description');
+        const learnMoreButton = document.getElementById('learn-more');
+        const closeModalButton = modal.querySelector('.close-button');
+        const overlay = document.getElementById('overlay');
+        const geminiButton = document.getElementById('gemini-optimize-button');
+        const geminiLoader = document.getElementById('gemini-loader');
+        const geminiResponse = document.getElementById('gemini-response');
+        let currentTopic = null;
+
+        function openModal(topic) { /* ... same as before ... */ }
+        function closeModal() { /* ... same as before ... */ }
+        function showDetailsPage(topic) { /* ... same as before ... */ }
+        function showFactoryPage() { /* ... same as before ... */ }
+        async function getOptimizationIdeas() { /* ... same as before ... */ }
+
+        function addHotspotListeners() {
+            document.querySelectorAll('.hotspot').forEach(button => {
+                button.addEventListener('click', () => {
+                    const topic = button.dataset.topic;
+                    openModal(topic);
+                });
+            });
+        }
+        
+        // --- Event Listeners ---
+        learnMoreButton.addEventListener('click', () => {
+            const topic = learnMoreButton.dataset.topic;
+            closeModal();
+            setTimeout(() => showDetailsPage(topic), 300);
+        });
+        closeModalButton.addEventListener('click', closeModal);
+        overlay.addEventListener('click', closeModal);
+        backButton.addEventListener('click', showFactoryPage);
+        geminiButton.addEventListener('click', getOptimizationIdeas);
+
+        // --- Initial Load ---
+        document.addEventListener('DOMContentLoaded', loadHotspots);
+
+        // --- Full function definitions (pasted from previous version for brevity) ---
+        function openModal(topic) { const data = contentData[topic]; if (!data) return; modalTitle.textContent = data.title; modalDescription.textContent = data.description.substring(0, 150) + '...'; learnMoreButton.textContent = 'Learn More →'; learnMoreButton.dataset.topic = topic; modal.classList.add('active'); overlay.classList.add('active'); }
+        function closeModal() { modal.classList.remove('active'); overlay.classList.remove('active'); }
+        function showDetailsPage(topic) { currentTopic = topic; const data = contentData[topic]; if (!data) return; const detailsTitle = document.getElementById('details-title'); const detailsDescription = document.getElementById('details-description'); const detailsMedia = document.getElementById('details-media'); detailsTitle.classList.remove('content-fade-in'); detailsDescription.classList.remove('content-fade-in'); void detailsTitle.offsetWidth; void detailsDescription.offsetWidth; detailsTitle.textContent = data.title; detailsDescription.textContent = data.description; detailsMedia.innerHTML = data.media; geminiResponse.innerHTML = ''; detailsTitle.classList.add('content-fade-in'); detailsDescription.classList.add('content-fade-in'); factoryView.style.display = 'none'; detailsView.style.display = 'block'; window.scrollTo(0, 0); }
+        function showFactoryPage() { detailsView.style.display = 'none'; factoryView.style.display = 'block'; }
+        async function getOptimizationIdeas() { if (!currentTopic) return; const data = contentData[currentTopic]; const prompt = `Based on the following industrial process, suggest three innovative and actionable optimization ideas. For each idea, provide a brief explanation of its potential benefits.\n\nProcess: ${data.title}\nDescription: ${data.description}\n\nFormat the response clearly, for example:\n1. **Idea Name:** [Explanation]\n2. **Idea Name:** [Explanation]\n3. **Idea Name:** [Explanation]`; geminiLoader.style.display = 'block'; geminiResponse.innerHTML = ''; try { let chatHistory = [{ role: "user", parts: [{ text: prompt }] }]; const payload = { contents: chatHistory }; const apiKey = ""; const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`; let response; let retries = 3; let delay = 1000; for (let i = 0; i < retries; i++) { response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }); if (response.ok) break; if (i < retries - 1) await new Promise(res => setTimeout(res, delay)); delay *= 2; } if (!response.ok) { throw new Error('API request failed after multiple retries.'); } const result = await response.json(); if (result.candidates && result.candidates.length > 0 && result.candidates[0].content && result.candidates[0].content.parts && result.candidates[0].content.parts.length > 0) { const text = result.candidates[0].content.parts[0].text; geminiResponse.textContent = text; } else { geminiResponse.textContent = 'Sorry, I couldn\'t generate any ideas at the moment. Please try again later.'; } } catch (error) { console.error("Error calling Gemini API:", error); geminiResponse.textContent = 'An error occurred while fetching suggestions. Please check the console for details.'; } finally { geminiLoader.style.display = 'none'; } }
+    </script>
+</body>
+</html>
