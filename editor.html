@@ -54,6 +54,14 @@
             <input type="text" id="hotspot-text-input">
         </div>
         <div class="editor-control">
+            <label for="hotspot-top-slider">Vertical Position</label>
+            <input type="range" id="hotspot-top-slider" min="0" max="100" value="50">
+        </div>
+        <div class="editor-control">
+            <label for="hotspot-left-slider">Horizontal Position</label>
+            <input type="range" id="hotspot-left-slider" min="0" max="100" value="50">
+        </div>
+        <div class="editor-control">
             <label for="spotlight-angle-slider">Spotlight Angle</label>
             <input type="range" id="spotlight-angle-slider" min="-180" max="180" value="0">
         </div>
@@ -84,6 +92,8 @@
         // --- GUI Editor Logic ---
         const hotspotSelect = document.getElementById('hotspot-select');
         const textInput = document.getElementById('hotspot-text-input');
+        const topSlider = document.getElementById('hotspot-top-slider');
+        const leftSlider = document.getElementById('hotspot-left-slider');
         const angleSlider = document.getElementById('spotlight-angle-slider');
         const lengthSlider = document.getElementById('spotlight-length-slider');
         const saveButton = document.getElementById('save-config-button');
@@ -133,6 +143,8 @@
             selectedHotspotData = hotspotData[index];
             
             textInput.value = selectedHotspotData.text;
+            topSlider.value = parseFloat(selectedHotspotData.top);
+            leftSlider.value = parseFloat(selectedHotspotData.left);
             angleSlider.value = selectedHotspotData.angle;
             lengthSlider.value = selectedHotspotData.length;
         }
@@ -148,6 +160,22 @@
                 selectedHotspotData.text = textInput.value;
                 selectedHotspot.querySelector('.hotspot-text').innerHTML = textInput.value;
                 hotspotSelect.options[selectedHotspot.dataset.index].textContent = textInput.value.replace('<br>', ' ');
+            }
+        });
+
+        topSlider.addEventListener('input', () => {
+            if (selectedHotspot) {
+                const top = topSlider.value;
+                selectedHotspot.style.top = `${top}%`;
+                selectedHotspotData.top = `${top}%`;
+            }
+        });
+
+        leftSlider.addEventListener('input', () => {
+            if (selectedHotspot) {
+                const left = leftSlider.value;
+                selectedHotspot.style.left = `${left}%`;
+                selectedHotspotData.left = `${left}%`;
             }
         });
 
@@ -169,6 +197,7 @@
         
         saveButton.addEventListener('click', () => {
             const configString = JSON.stringify(hotspotData, null, 2);
+            localStorage.setItem('hotspotConfig', configString);
             const blob = new Blob([configString], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -178,7 +207,7 @@
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
-            alert('Configuration saved as config.json!');
+            alert('Configuration saved to browser storage and downloaded as config.json!');
         });
 
         // Initial setup
