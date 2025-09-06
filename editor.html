@@ -6,7 +6,7 @@
     <title>Interactive Smart Factory - EDITOR</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto:wght@400;500;700&family=Montserrat:wght@400;500;700&family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #f0f2f5; margin: 0; padding: 1rem; }
         .factory-container { position: relative; max-width: 1400px; width: 100%; margin: auto; border-radius: 1rem; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
@@ -54,6 +54,16 @@
             <input type="text" id="hotspot-text-input">
         </div>
         <div class="editor-control">
+
+            <label for="hotspot-font-select">Font</label>
+            <select id="hotspot-font-select">
+                <option value="Inter, sans-serif" style="font-family: 'Inter', sans-serif;">Inter</option>
+                <option value="Roboto, sans-serif" style="font-family: 'Roboto', sans-serif;">Roboto</option>
+                <option value="Montserrat, sans-serif" style="font-family: 'Montserrat', sans-serif;">Montserrat</option>
+                <option value="Poppins, sans-serif" style="font-family: 'Poppins', sans-serif;">Poppins</option>
+            </select>
+        </div>
+        <div class="editor-control">
             <label for="hotspot-top-slider">Vertical Position</label>
             <input type="range" id="hotspot-top-slider" min="0" max="100" value="50">
         </div>
@@ -77,21 +87,23 @@
         
         // Initial data for hotspots. This will be the starting point.
         let hotspotData = [
-            { topic: "agv", text: "AGV & SVG<br>Tracking", top: "60%", left: "12%", angle: -45, length: 120, category: "productivity" },
-            { topic: "pick-place", text: "Pick & Place", top: "75%", left: "22%", angle: -45, length: 120, category: "productivity" },
-            { topic: "conveyor", text: "Conveyor Speed<br>Measurement", top: "70%", left: "60%", angle: -135, length: 120, category: "productivity" },
-            { topic: "barcode", text: "Barcode<br>Localization", top: "68%", left: "75%", angle: -135, length: 120, category: "productivity" },
-            { topic: "area-monitoring", text: "Area<br>Monitoring", top: "48%", left: "28%", angle: 45, length: 120, category: "safety" },
-            { topic: "spatter", text: "Spatter<br>Monitoring", top: "78%", left: "48%", angle: 180, length: 120, category: "safety" },
-            { topic: "fluid-dynamics", text: "Fluid Dynamics<br>Monitoring", top: "20%", left: "80%", angle: -135, length: 120, category: "safety" },
-            { topic: "particle-size", text: "Particle Size<br>Monitoring", top: "30%", left: "60%", angle: -45, length: 120, category: "quality" },
-            { topic: "high-speed", text: "High-Speed<br>Counting", top: "50%", left: "88%", angle: -90, length: 120, category: "quality" },
-            { topic: "vibration", text: "Vibration<br>Measurement", top: "35%", left: "45%", angle: 45, length: 120, category: "predictive-maintenance" }
+            { topic: "agv", text: "AGV & SVG<br>Tracking", top: "60%", left: "12%", angle: -45, length: 120, category: "productivity", font: "Roboto, sans-serif" },
+            { topic: "pick-place", text: "Pick & Place", top: "75%", left: "22%", angle: -45, length: 120, category: "productivity", font: "Montserrat, sans-serif" },
+            { topic: "conveyor", text: "Conveyor Speed<br>Measurement", top: "70%", left: "60%", angle: -135, length: 120, category: "productivity", font: "Poppins, sans-serif" },
+            { topic: "barcode", text: "Barcode<br>Localization", top: "68%", left: "75%", angle: -135, length: 120, category: "productivity", font: "Inter, sans-serif" },
+            { topic: "area-monitoring", text: "Area<br>Monitoring", top: "48%", left: "28%", angle: 45, length: 120, category: "safety", font: "Roboto, sans-serif" },
+            { topic: "spatter", text: "Spatter<br>Monitoring", top: "78%", left: "48%", angle: 180, length: 120, category: "safety", font: "Montserrat, sans-serif" },
+            { topic: "fluid-dynamics", text: "Fluid Dynamics<br>Monitoring", top: "20%", left: "80%", angle: -135, length: 120, category: "safety", font: "Poppins, sans-serif" },
+            { topic: "particle-size", text: "Particle Size<br>Monitoring", top: "30%", left: "60%", angle: -45, length: 120, category: "quality", font: "Inter, sans-serif" },
+            { topic: "high-speed", text: "High-Speed<br>Counting", top: "50%", left: "88%", angle: -90, length: 120, category: "quality", font: "Roboto, sans-serif" },
+            { topic: "vibration", text: "Vibration<br>Measurement", top: "35%", left: "45%", angle: 45, length: 120, category: "predictive-maintenance", font: "Montserrat, sans-serif" }
         ];
 
         // --- GUI Editor Logic ---
         const hotspotSelect = document.getElementById('hotspot-select');
         const textInput = document.getElementById('hotspot-text-input');
+
+        const fontSelect = document.getElementById('hotspot-font-select');
         const topSlider = document.getElementById('hotspot-top-slider');
         const leftSlider = document.getElementById('hotspot-left-slider');
         const angleSlider = document.getElementById('spotlight-angle-slider');
@@ -111,6 +123,7 @@
                 hotspot.style.left = data.left;
                 hotspot.style.setProperty('--spotlight-angle', `${data.angle}deg`);
                 hotspot.style.setProperty('--spotlight-length', `${data.length}px`);
+                hotspot.style.fontFamily = data.font || 'Inter, sans-serif';
                 hotspot.dataset.index = index;
                 hotspot.innerHTML = `<img src="camera-icon.png" class="camera-icon"><div class="hotspot-text">${data.text}</div>`;
                 
@@ -118,6 +131,7 @@
                 const option = document.createElement('option');
                 option.value = index;
                 option.textContent = data.text.replace('<br>', ' ');
+                option.style.fontFamily = data.font || 'Inter, sans-serif';
                 hotspotSelect.appendChild(option);
                 
                 factoryContainer.appendChild(hotspot);
@@ -143,6 +157,7 @@
             selectedHotspotData = hotspotData[index];
             
             textInput.value = selectedHotspotData.text;
+            fontSelect.value = selectedHotspotData.font || 'Inter, sans-serif';
             topSlider.value = parseFloat(selectedHotspotData.top);
             leftSlider.value = parseFloat(selectedHotspotData.left);
             angleSlider.value = selectedHotspotData.angle;
@@ -162,6 +177,17 @@
                 hotspotSelect.options[selectedHotspot.dataset.index].textContent = textInput.value.replace('<br>', ' ');
             }
         });
+
+
+        fontSelect.addEventListener('change', () => {
+            if (selectedHotspot) {
+                const font = fontSelect.value;
+                selectedHotspot.style.fontFamily = font;
+                selectedHotspotData.font = font;
+                hotspotSelect.options[selectedHotspot.dataset.index].style.fontFamily = font;
+            }
+        });
+
 
         topSlider.addEventListener('input', () => {
             if (selectedHotspot) {
