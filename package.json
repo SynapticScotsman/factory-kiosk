@@ -1,0 +1,5 @@
+{
+  "name": "factory-kiosk",
+  "version": "0.1.0",
+  "scripts": { "test": "echo \"No tests yet\" && exit 0" }
+}
