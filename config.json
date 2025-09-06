@@ -6,7 +6,8 @@
     "left": "12%",
     "angle": -138,
     "length": 256,
-    "category": "productivity"
+    "category": "productivity",
+    "font": "Roboto, sans-serif"
   },
   {
     "topic": "pick-place",
@@ -15,7 +16,8 @@
     "left": "22%",
     "angle": -45,
     "length": 120,
-    "category": "productivity"
+    "category": "productivity",
+    "font": "Montserrat, sans-serif"
   },
   {
     "topic": "conveyor",
@@ -24,7 +26,8 @@
     "left": "60%",
     "angle": -135,
     "length": 120,
-    "category": "productivity"
+    "category": "productivity",
+    "font": "Poppins, sans-serif"
   },
   {
     "topic": "barcode",
@@ -33,7 +36,8 @@
     "left": "75%",
     "angle": -135,
     "length": 120,
-    "category": "productivity"
+    "category": "productivity",
+    "font": "Inter, sans-serif"
   },
   {
     "topic": "area-monitoring",
@@ -42,7 +46,8 @@
     "left": "28%",
     "angle": 45,
     "length": 120,
-    "category": "safety"
+    "category": "safety",
+    "font": "Roboto, sans-serif"
   },
   {
     "topic": "spatter",
@@ -51,7 +56,8 @@
     "left": "48%",
     "angle": 180,
     "length": 120,
-    "category": "safety"
+    "category": "safety",
+    "font": "Montserrat, sans-serif"
   },
   {
     "topic": "fluid-dynamics",
@@ -60,7 +66,8 @@
     "left": "80%",
     "angle": -135,
     "length": 120,
-    "category": "safety"
+    "category": "safety",
+    "font": "Poppins, sans-serif"
   },
   {
     "topic": "particle-size",
@@ -69,7 +76,8 @@
     "left": "60%",
     "angle": -45,
     "length": 120,
-    "category": "quality"
+    "category": "quality",
+    "font": "Inter, sans-serif"
   },
   {
     "topic": "high-speed",
@@ -78,7 +86,8 @@
     "left": "88%",
     "angle": -90,
     "length": 120,
-    "category": "quality"
+    "category": "quality",
+    "font": "Roboto, sans-serif"
   },
   {
     "topic": "vibration",
@@ -87,6 +96,7 @@
     "left": "45%",
     "angle": 45,
     "length": 120,
-    "category": "predictive-maintenance"
+    "category": "predictive-maintenance",
+    "font": "Montserrat, sans-serif"
   }
 ]
