@@ -54,8 +54,10 @@
         .content-fade-in { animation: fadeIn-up 0.6s ease-out forwards; }
         .edit-button { position: fixed; top: 1rem; right: 1rem; background-color: #48bb78; color: white; border: none; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; text-decoration: none; cursor: pointer; }
         .edit-button:hover { background-color: #38a169; }
+
         .font-samples { margin-top: 2rem; }
         .font-samples p { margin: 0.25rem 0; }
+
     </style>
 </head>
 <body>
@@ -131,6 +133,7 @@
                     const hotspot = document.createElement('button');
                     hotspot.className = `hotspot ${data.category}`;
                     hotspot.style.top = data.top;
+
                     hotspot.style.left = data.left;
                     hotspot.style.setProperty('--spotlight-angle', `${data.angle}deg`);
                     hotspot.style.setProperty('--spotlight-length', `${data.length}px`);

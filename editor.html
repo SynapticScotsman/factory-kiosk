@@ -54,6 +54,7 @@
             <input type="text" id="hotspot-text-input">
         </div>
         <div class="editor-control">
+
             <label for="hotspot-font-select">Font</label>
             <select id="hotspot-font-select">
                 <option value="Inter, sans-serif" style="font-family: 'Inter', sans-serif;">Inter</option>
@@ -101,6 +102,7 @@
         // --- GUI Editor Logic ---
         const hotspotSelect = document.getElementById('hotspot-select');
         const textInput = document.getElementById('hotspot-text-input');
+
         const fontSelect = document.getElementById('hotspot-font-select');
         const topSlider = document.getElementById('hotspot-top-slider');
         const leftSlider = document.getElementById('hotspot-left-slider');
@@ -176,6 +178,7 @@
             }
         });
 
+
         fontSelect.addEventListener('change', () => {
             if (selectedHotspot) {
                 const font = fontSelect.value;
@@ -184,6 +187,7 @@
                 hotspotSelect.options[selectedHotspot.dataset.index].style.fontFamily = font;
             }
         });
+
 
         topSlider.addEventListener('input', () => {
             if (selectedHotspot) {
