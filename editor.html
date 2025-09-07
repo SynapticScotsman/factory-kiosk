@@ -10,7 +10,7 @@
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #f0f2f5; margin: 0; padding: 1rem; }
         .factory-container { position: relative; max-width: 1400px; width: 100%; margin: auto; border-radius: 1rem; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); background: url('Artboard 1@4x.png') center/cover no-repeat; aspect-ratio: 1400/788; }
-        .hotspot { position: absolute; width: 110px; height: 110px; border-radius: 50%; cursor: pointer; transform: translate(-50%, -50%); display: flex; flex-direction: column; justify-content: flex-end; align-items: center; text-align: center; color: white; font-weight: 600; line-height: 1.2; text-transform: uppercase; border: 2px solid rgba(255, 255, 255, 0.7); box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: transform 0.3s ease, box-shadow 0.3s ease; padding-bottom: 25px; box-sizing: border-box; }
+        .hotspot { position: absolute; width: 110px; height: 110px; border-radius: 50%; cursor: move; /* Changed cursor */ transform: translate(-50%, -50%); display: flex; flex-direction: column; justify-content: flex-end; align-items: center; text-align: center; color: white; font-weight: 600; line-height: 1.2; text-transform: uppercase; border: 2px solid rgba(255, 255, 255, 0.7); box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: transform 0.3s ease, box-shadow 0.3s ease; padding-bottom: 25px; box-sizing: border-box; user-select: none; /* Prevent text selection while dragging */ }
         .hotspot:hover, .hotspot.selected { transform: translate(-50%, -50%) scale(1.05); box-shadow: 0 0 20px 5px #ffdd00; z-index: 10; }
         .hotspot-icon { position: absolute; width: 75px; height: 75px; top: -38px; left: 50%; transform: translateX(-50%); filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3)); pointer-events: none; }
         .hotspot-text { font-size: 0.8rem; }
@@ -177,8 +177,46 @@
 
             function addHotspotEventListeners() {
                 document.querySelectorAll('.hotspot').forEach(hotspot => {
+                    // Listener for selecting by clicking
                     hotspot.addEventListener('click', (e) => {
                         selectHotspot(e.currentTarget.dataset.index);
+                    });
+
+                    // Listeners for dragging
+                    hotspot.addEventListener('mousedown', function(e) {
+                        e.preventDefault();
+                        selectHotspot(hotspot.dataset.index);
+                        
+                        const rect = factoryContainer.getBoundingClientRect();
+
+                        document.onmousemove = function(moveEvent) {
+                            let x = moveEvent.clientX - rect.left;
+                            let y = moveEvent.clientY - rect.top;
+
+                            x = Math.max(0, Math.min(x, rect.width));
+                            y = Math.max(0, Math.min(y, rect.height));
+
+                            const xPercent = (x / rect.width * 100);
+                            const yPercent = (y / rect.height * 100);
+
+                            hotspot.style.left = `${xPercent.toFixed(2)}%`;
+                            hotspot.style.top = `${yPercent.toFixed(2)}%`;
+                            
+                            const data = hotspotData[hotspot.dataset.index];
+                            if (data) {
+                                data.left = `${xPercent.toFixed(2)}%`;
+                                data.top = `${yPercent.toFixed(2)}%`;
+                            }
+                            
+                            // Update sliders in real-time
+                            topSlider.value = yPercent;
+                            leftSlider.value = xPercent;
+                        };
+
+                        document.onmouseup = function() {
+                            document.onmousemove = null;
+                            document.onmouseup = null;
+                        };
                     });
                 });
             }
