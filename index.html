@@ -7,13 +7,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto:wght@400;500;700&family=Montserrat:wght@400;500;700&family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
-
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #f0f2f5; margin: 0; padding: 1rem; }
-        .factory-container { position: relative; max-width: 1400px; width: 100%; margin: auto; border-radius: 1rem; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); background: url('Artboard 1@4x.png') center/cover no-repeat; aspect-ratio: 1400/788; }
+        .factory-container { position: relative; max-width: 1400px; width: 100%; margin: auto; border-radius: 1rem; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); background: url('Artboard 1.png') center/cover no-repeat; aspect-ratio: 1400/788; }
         .hotspot { position: absolute; width: 110px; height: 110px; border-radius: 50%; cursor: pointer; transform: translate(-50%, -50%); display: flex; flex-direction: column; justify-content: flex-end; align-items: center; text-align: center; color: white; font-weight: 600; line-height: 1.2; text-transform: uppercase; border: 2px solid rgba(255, 255, 255, 0.7); box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: transform 0.3s ease; padding-bottom: 25px; box-sizing: border-box; }
         .hotspot:hover { transform: translate(-50%, -50%) scale(1.05); }
         .hotspot-icon { position: absolute; font-size: 75px; top: -38px; left: 50%; transform: translateX(-50%); filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3)); pointer-events: none; line-height: 1; }
+
         .hotspot-text { font-size: 0.8rem; }
         .hotspot.productivity { background-color: #4A90E2; }
         .hotspot.safety { background-color: #f56565; }
@@ -54,8 +54,6 @@
         .content-fade-in { animation: fadeIn-up 0.6s ease-out forwards; }
         .edit-button { position: fixed; top: 1rem; right: 1rem; background-color: #48bb78; color: white; border: none; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; text-decoration: none; cursor: pointer; }
         .edit-button:hover { background-color: #38a169; }
-        .font-samples { margin-top: 2rem; }
-        .font-samples p { margin: 0.25rem 0; }
     </style>
 </head>
 <body>
@@ -147,6 +145,7 @@
                     factoryContainer.appendChild(hotspot);
                 });
 
+
                 
                 // Add event listeners after hotspots are created
                 addHotspotListeners();
@@ -175,7 +174,9 @@
         const geminiResponse = document.getElementById('gemini-response');
         let currentTopic = null;
 
+
         function addHotspotListeners() {
+
             document.querySelectorAll('.hotspot').forEach(button => {
                 button.addEventListener('click', () => {
                     const topic = button.dataset.topic;
@@ -198,7 +199,6 @@
         // --- Initial Load ---
         document.addEventListener('DOMContentLoaded', loadHotspots);
 
-        // --- Full function definitions (pasted from previous version for brevity) ---
         function openModal(topic) { const data = contentData[topic]; if (!data) return; modalTitle.textContent = data.title; modalDescription.textContent = data.description.substring(0, 150) + '...'; learnMoreButton.textContent = 'Learn More →'; learnMoreButton.dataset.topic = topic; modal.classList.add('active'); overlay.classList.add('active'); }
         function closeModal() { modal.classList.remove('active'); overlay.classList.remove('active'); }
         function showDetailsPage(topic) { currentTopic = topic; const data = contentData[topic]; if (!data) return; const detailsTitle = document.getElementById('details-title'); const detailsDescription = document.getElementById('details-description'); const detailsMedia = document.getElementById('details-media'); detailsTitle.classList.remove('content-fade-in'); detailsDescription.classList.remove('content-fade-in'); void detailsTitle.offsetWidth; void detailsDescription.offsetWidth; detailsTitle.textContent = data.title; detailsDescription.textContent = data.description; detailsMedia.innerHTML = data.media; geminiResponse.innerHTML = ''; detailsTitle.classList.add('content-fade-in'); detailsDescription.classList.add('content-fade-in'); factoryView.style.display = 'none'; detailsView.style.display = 'block'; window.scrollTo(0, 0); }
