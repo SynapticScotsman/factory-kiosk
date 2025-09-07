@@ -8,3 +8,12 @@ This demo displays a factory artboard with configurable hotspots.
 - Hotspots can be positioned horizontally and vertically, and support multiple fonts for their labels.
 
 ****https://synapticscotsman.github.io/factory-kiosk/****
+
+Testing
+-------
+
+Run tests with:
+
+```sh
+npm test
+```
