@@ -75,14 +75,6 @@
                 </select>
             </div>
             <div class="editor-control">
-                <label for="hotspot-top-slider">Vertical Position (%)</label>
-                <input type="range" id="hotspot-top-slider" min="0" max="100" value="50">
-            </div>
-            <div class="editor-control">
-                <label for="hotspot-left-slider">Horizontal Position (%)</label>
-                <input type="range" id="hotspot-left-slider" min="0" max="100" value="50">
-            </div>
-            <div class="editor-control">
                 <label for="spotlight-angle-slider">Spotlight Angle (deg)</label>
                 <input type="range" id="spotlight-angle-slider" min="-180" max="180" value="0">
             </div>
@@ -106,8 +98,6 @@
             const textInput = document.getElementById('hotspot-text-input');
             const fontSelect = document.getElementById('hotspot-font-select');
             const iconSelect = document.getElementById('hotspot-icon-select');
-            const topSlider = document.getElementById('hotspot-top-slider');
-            const leftSlider = document.getElementById('hotspot-left-slider');
             const angleSlider = document.getElementById('spotlight-angle-slider');
             const lengthSlider = document.getElementById('spotlight-length-slider');
             const saveButton = document.getElementById('save-config-button');
@@ -150,8 +140,6 @@
                 textInput.value = data.text;
                 fontSelect.value = data.font;
                 iconSelect.value = data.icon;
-                topSlider.value = parseFloat(data.top);
-                leftSlider.value = parseFloat(data.left);
                 angleSlider.value = data.angle;
                 lengthSlider.value = data.length;
             }
@@ -207,10 +195,6 @@
                                 data.left = `${xPercent.toFixed(2)}%`;
                                 data.top = `${yPercent.toFixed(2)}%`;
                             }
-                            
-                            // Update sliders in real-time
-                            topSlider.value = yPercent;
-                            leftSlider.value = xPercent;
                         };
 
                         document.onmouseup = function() {
@@ -229,13 +213,10 @@
                 data.text = textInput.value;
                 data.font = fontSelect.value;
                 data.icon = iconSelect.value;
-                data.top = `${topSlider.value}%`;
-                data.left = `${leftSlider.value}%`;
+                // Position is now handled by dragging, not reading from sliders
                 data.angle = angleSlider.value;
                 data.length = lengthSlider.value;
-
-                element.style.top = data.top;
-                element.style.left = data.left;
+                
                 element.style.fontFamily = data.font;
                 element.querySelector('.hotspot-icon').src = data.icon;
                 element.querySelector('.hotspot-text').innerHTML = data.text;
@@ -247,7 +228,7 @@
 
             hotspotSelect.addEventListener('change', () => selectHotspot(hotspotSelect.value));
             
-            [textInput, fontSelect, iconSelect, topSlider, leftSlider, angleSlider, lengthSlider].forEach(input => {
+            [textInput, fontSelect, iconSelect, angleSlider, lengthSlider].forEach(input => {
                 input.addEventListener('input', () => {
                     if (selectedHotspotElement) {
                         applyChanges(selectedHotspotElement.dataset.index);
