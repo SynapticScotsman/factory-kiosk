@@ -17,7 +17,7 @@
     "topic": "pick-place",
     "title": "Pick & Place",
     "description": "Full description for Pick & Place goes here. Detail how visual guidance systems enable robotic arms to perform tasks with sub-millimeter precision.",
-    "media": "<iframe width='100%' height='450' src='https://www.youtube.com/embed/UAnSuj0zZ3Yes' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' allowfullscreen></iframe>",
+    "media": "<iframe width='100%' height='450' src='https://www.youtube.com/embed/UAnSuj0zZ3Y' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' allowfullscreen></iframe>",
     "text": "Pick & Place",
     "top": "75%",
     "left": "25%",
@@ -140,3 +140,4 @@
     "font": "Inter, sans-serif"
   }
 ]
+
