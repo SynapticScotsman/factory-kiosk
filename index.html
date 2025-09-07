@@ -137,15 +137,24 @@
         let loadedHotspotConfig = []; // Will store the fully loaded config
 
         async function loadHotspots() {
+            let hotspotData;
             try {
-                const localConfig = localStorage.getItem('hotspotConfig');
-                if (localConfig) {
-                    loadedHotspotConfig = JSON.parse(localConfig);
+                // STEP 1: Always try to fetch the config.json file from the server first.
+                const response = await fetch('./config.json');
+                if (response.ok) {
+                    hotspotData = await response.json();
                 } else {
-                    const response = await fetch('./config.json');
-                    if (!response.ok) throw new Error('config.json not found');
-                    loadedHotspotConfig = await response.json();
+                    // STEP 2: If config.json fails, fall back to local storage.
+                    const localConfig = localStorage.getItem('hotspotConfig');
+                    if (localConfig) {
+                        hotspotData = JSON.parse(localConfig);
+                    } else {
+                        // If both fail, throw an error.
+                        throw new Error('config.json not found and no local configuration available.');
+                    }
                 }
+
+                loadedHotspotConfig = hotspotData; // Store the loaded data globally
 
                 loadedHotspotConfig.forEach(data => {
                     const hotspot = document.createElement('button');
@@ -242,5 +251,4 @@
     </script>
 </body>
 </html>
-
 
