@@ -134,36 +134,20 @@
 
     <script>
         const factoryContainer = document.getElementById('factory-view');
-        const videoEmbedCode = '<iframe width="100%" height="450" src="https://www.youtube.com/embed/UAnSuj0zZ3Y" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>';
-
-        const contentData = {
-            'agv': { title: 'AGV & SVG Tracking', description: 'Boost your logistical efficiency. Our system provides precise, real-time tracking of Autonomous and Smart Guided Vehicles...', media: videoEmbedCode },
-            'pick-place': { title: 'Pick & Place', description: 'Achieve unparalleled speed and accuracy...', media: videoEmbedCode },
-            'conveyor': { title: 'Conveyor Speed Measurement', description: 'Synchronize your entire production line...', media: videoEmbedCode },
-            'barcode': { title: 'Barcode Localization', description: 'Never miss a scan...', media: videoEmbedCode },
-            'area-monitoring': { title: 'Area Monitoring', description: 'Protect your most valuable asset: your people...', media: videoEmbedCode },
-            'spatter': { title: 'Spatter Monitoring', description: 'Ensure both quality and safety...', media: videoEmbedCode },
-            'fluid-dynamics': { title: 'Fluid Dynamics Monitoring', description: 'Prevent hazardous spills and system failures...', media: videoEmbedCode },
-            'particle-size': { title: 'Particle Size Monitoring', description: 'Consistency is key to quality...', media: videoEmbedCode },
-            'high-speed': { title: 'High-Speed Counting', description: 'Achieve 100% accuracy in inventory and packaging...', media: videoEmbedCode },
-            'vibration': { title: 'Vibration Measurement', description: 'Prevent downtime before it happens...', media: videoEmbedCode }
-        };
+        let loadedHotspotConfig = []; // Will store the fully loaded config
 
         async function loadHotspots() {
-            let hotspotData;
             try {
-                // First, try to load from local storage (saved from editor)
                 const localConfig = localStorage.getItem('hotspotConfig');
                 if (localConfig) {
-                    hotspotData = JSON.parse(localConfig);
+                    loadedHotspotConfig = JSON.parse(localConfig);
                 } else {
-                    // If not in local storage, fetch the config.json file from the server
-                    const response = await fetch('./config.json'); // Corrected path
+                    const response = await fetch('./config.json');
                     if (!response.ok) throw new Error('config.json not found');
-                    hotspotData = await response.json();
+                    loadedHotspotConfig = await response.json();
                 }
 
-                hotspotData.forEach(data => {
+                loadedHotspotConfig.forEach(data => {
                     const hotspot = document.createElement('button');
                     hotspot.className = `hotspot ${data.category}`;
                     hotspot.style.top = data.top;
@@ -202,10 +186,52 @@
             });
         }
         
-        function openModal(topic) { const data = contentData[topic]; if (!data) return; modalTitle.textContent = data.title; modalDescription.textContent = data.description.substring(0, 150) + '...'; learnMoreButton.textContent = 'Learn More →'; learnMoreButton.dataset.topic = topic; modal.classList.add('active'); overlay.classList.add('active'); }
-        function closeModal() { modal.classList.remove('active'); overlay.classList.remove('active'); }
-        function showDetailsPage(topic) { const data = contentData[topic]; if (!data) return; const detailsTitle = document.getElementById('details-title'); const detailsDescription = document.getElementById('details-description'); const detailsMedia = document.getElementById('details-media'); detailsTitle.classList.remove('content-fade-in'); detailsDescription.classList.remove('content-fade-in'); void detailsTitle.offsetWidth; void detailsDescription.offsetWidth; detailsTitle.textContent = data.title; detailsDescription.textContent = data.description; detailsMedia.innerHTML = data.media; detailsTitle.classList.add('content-fade-in'); detailsDescription.classList.add('content-fade-in'); document.getElementById('factory-view').style.display = 'none'; detailsView.style.display = 'block'; window.scrollTo(0, 0); }
-        function showFactoryPage() { detailsView.style.display = 'none'; document.getElementById('factory-view').style.display = 'block'; }
+        function openModal(topic) { 
+            const data = loadedHotspotConfig.find(h => h.topic === topic);
+            if (!data) return; 
+
+            modalTitle.textContent = data.title; 
+            modalDescription.textContent = data.description.substring(0, 150) + '...'; 
+            learnMoreButton.textContent = 'Learn More →'; 
+            learnMoreButton.dataset.topic = topic; 
+            modal.classList.add('active'); 
+            overlay.classList.add('active'); 
+        }
+
+        function closeModal() { 
+            modal.classList.remove('active'); 
+            overlay.classList.remove('active'); 
+        }
+        
+        function showDetailsPage(topic) { 
+            const data = loadedHotspotConfig.find(h => h.topic === topic);
+            if (!data) return; 
+
+            const detailsTitle = document.getElementById('details-title'); 
+            const detailsDescription = document.getElementById('details-description'); 
+            const detailsMedia = document.getElementById('details-media'); 
+            
+            detailsTitle.classList.remove('content-fade-in'); 
+            detailsDescription.classList.remove('content-fade-in'); 
+            void detailsTitle.offsetWidth; 
+            void detailsDescription.offsetWidth; 
+            
+            detailsTitle.textContent = data.title; 
+            detailsDescription.textContent = data.description; 
+            detailsMedia.innerHTML = data.media; 
+            
+            detailsTitle.classList.add('content-fade-in'); 
+            detailsDescription.classList.add('content-fade-in'); 
+            
+            document.getElementById('factory-view').style.display = 'none'; 
+            detailsView.style.display = 'block'; 
+            window.scrollTo(0, 0); 
+        }
+        
+        function showFactoryPage() { 
+            detailsView.style.display = 'none'; 
+            document.getElementById('factory-view').style.display = 'block'; 
+        }
         
         learnMoreButton.addEventListener('click', () => { const topic = learnMoreButton.dataset.topic; closeModal(); setTimeout(() => showDetailsPage(topic), 300); });
         closeModalButton.addEventListener('click', closeModal);
