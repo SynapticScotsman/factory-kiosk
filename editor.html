@@ -311,7 +311,7 @@
                             data.left = xPercent;
                             data.top = yPercent;
                         }
-                        // Live update sliders
+                        // Live update sliders as the hotspot is dragged
                         updateEditorControls();
                     };
                     document.onmouseup = () => {
@@ -322,29 +322,58 @@
             });
         }
         
-        // --- Control Panel Event Listeners ---
-        [textInput, topicSelect, categorySelect, iconSelect, angleInput, lengthInput].forEach(input => {
-            input.addEventListener('input', () => {
-                if (!selectedHotspot) return;
-                const data = hotspotsData.find(h => h.id == selectedHotspot.dataset.id);
-                if (!data) return;
-                
+        // --- Control Panel Event Listeners (FIXED) ---
+        textInput.addEventListener('input', () => {
+            if (!selectedHotspot) return;
+            const data = hotspotsData.find(h => h.id == selectedHotspot.dataset.id);
+            if(data) {
                 data.text = textInput.value;
-                data.topic = topicSelect.value;
-                data.category = categorySelect.value;
-                data.icon = iconSelect.value;
-                data.angle = angleInput.value;
-                data.length = lengthInput.value;
-                
-                // Re-render the single selected hotspot for simplicity
-                selectedHotspot.className = `hotspot selected ${data.category}`;
-                selectedHotspot.querySelector('.hotspot-icon').src = data.icon;
                 selectedHotspot.querySelector('.hotspot-text').innerHTML = data.text.replace(/\n/g, '<br>');
-                selectedHotspot.style.setProperty('--spotlight-angle', `${data.angle}deg`);
-                selectedHotspot.style.setProperty('--spotlight-length', `${data.length}px`);
-            });
+            }
         });
         
+        topicSelect.addEventListener('change', () => {
+            if (!selectedHotspot) return;
+            const data = hotspotsData.find(h => h.id == selectedHotspot.dataset.id);
+            if(data) data.topic = topicSelect.value;
+        });
+
+        categorySelect.addEventListener('change', () => {
+            if (!selectedHotspot) return;
+            const data = hotspotsData.find(h => h.id == selectedHotspot.dataset.id);
+            if(data) {
+                data.category = categorySelect.value;
+                selectedHotspot.className = `hotspot selected ${data.category}`;
+            }
+        });
+
+        iconSelect.addEventListener('change', () => {
+            if (!selectedHotspot) return;
+            const data = hotspotsData.find(h => h.id == selectedHotspot.dataset.id);
+            if(data) {
+                data.icon = iconSelect.value;
+                selectedHotspot.querySelector('.hotspot-icon').src = data.icon;
+            }
+        });
+
+        angleInput.addEventListener('input', () => {
+            if (!selectedHotspot) return;
+            const data = hotspotsData.find(h => h.id == selectedHotspot.dataset.id);
+            if(data) {
+                data.angle = angleInput.value;
+                selectedHotspot.style.setProperty('--spotlight-angle', `${data.angle}deg`);
+            }
+        });
+
+        lengthInput.addEventListener('input', () => {
+            if (!selectedHotspot) return;
+            const data = hotspotsData.find(h => h.id == selectedHotspot.dataset.id);
+            if(data) {
+                data.length = lengthInput.value;
+                selectedHotspot.style.setProperty('--spotlight-length', `${data.length}px`);
+            }
+        });
+
         addButton.addEventListener('click', () => {
             const newHotspot = {
                 id: nextId++, text: 'New\nHotspot', topic: 'agv', category: 'productivity',
