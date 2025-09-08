@@ -159,7 +159,7 @@
     </aside>
 
     <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
         const factoryContainer = document.getElementById('factory-container');
         const hotspotControls = document.getElementById('hotspot-controls');
         const noSelectionPanel = document.getElementById('no-selection');
@@ -341,25 +341,33 @@
             alert('Configuration saved to browser and downloaded as config.json!');
         });
         
-        // Initial load
+        // --- CORRECTED Initial Load Logic ---
         const savedConfig = localStorage.getItem('hotspotConfig');
         if (savedConfig) {
             hotspotData = JSON.parse(savedConfig);
+            renderHotspots();
         } else {
-            hotspotData = [
-                { "topic": "agv", "title": "AGV & SVG Tracking", "description": "Boost your logistical efficiency...", "media": "<iframe...>", "text": "AGV & SVG<br>Tracking", "top": "80%", "left": "15%", "angle": -45, "length": 120, "category": "productivity", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
-                { "topic": "pick-place", "title": "Pick & Place", "description": "Achieve unparalleled speed...", "media": "<iframe...>", "text": "Pick & Place", "top": "75%", "left": "25%", "angle": -45, "length": 120, "category": "productivity", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
-                { "topic": "conveyor", "title": "Conveyor Speed", "description": "Synchronize your entire production line...", "media": "<iframe...>", "text": "Conveyor Speed<br>Measurement", "top": "65%", "left": "50%", "angle": 135, "length": 120, "category": "productivity", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
-                { "topic": "barcode", "title": "Barcode Localization", "description": "Never miss a scan...", "media": "<iframe...>", "text": "Barcode<br>Localization", "top": "60%", "left": "65%", "angle": 135, "length": 120, "category": "productivity", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
-                { "topic": "area-monitoring", "title": "Area Monitoring", "description": "Protect your most valuable asset...", "media": "<iframe...>", "text": "Area<br>Monitoring", "top": "40%", "left": "30%", "angle": -45, "length": 120, "category": "safety", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
-                { "topic": "spatter", "title": "Spatter Monitoring", "description": "Ensure both quality and safety...", "media": "<iframe...>", "text": "Spatter<br>Monitoring", "top": "70%", "left": "45%", "angle": 180, "length": 120, "category": "safety", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
-                { "topic": "fluid-dynamics", "title": "Fluid Dynamics", "description": "Prevent hazardous spills...", "media": "<iframe...>", "text": "Fluid Dynamics<br>Monitoring", "top": "25%", "left": "85%", "angle": 45, "length": 120, "category": "safety", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
-                { "topic": "particle-size", "title": "Particle Size", "description": "Consistency is key to quality...", "media": "<iframe...>", "text": "Particle Size<br>Monitoring", "top": "40%", "left": "70%", "angle": 45, "length": 120, "category": "quality", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
-                { "topic": "high-speed", "title": "High-Speed Counting", "description": "Achieve 100% accuracy...", "media": "<iframe...>", "text": "High-Speed<br>Counting", "top": "55%", "left": "80%", "angle": 90, "length": 120, "category": "quality", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
-                { "topic": "vibration", "title": "Vibration Measurement", "description": "Prevent downtime before it happens...", "media": "<iframe...>", "text": "Vibration<br>Measurement", "top": "50%", "left": "40%", "angle": -135, "length": 120, "category": "predictive-maintenance", "icon": "earlogo.png", "font": "Inter, sans-serif" }
-            ];
+            fetch('./config.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('config.json not found, loading fallback.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    hotspotData = data;
+                    renderHotspots();
+                })
+                .catch(error => {
+                    console.warn(error.message);
+                    // Hardcoded default data as a final fallback
+                    hotspotData = [
+                        { "topic": "agv", "title": "AGV & SVG Tracking", "description": "Boost your logistical efficiency...", "media": "<iframe...>", "text": "AGV & SVG<br>Tracking", "top": "80%", "left": "15%", "angle": -45, "length": 120, "category": "productivity", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
+                        { "topic": "vibration", "title": "Vibration Measurement", "description": "Prevent downtime before it happens...", "media": "<iframe...>", "text": "Vibration<br>Measurement", "top": "50%", "left": "40%", "angle": -135, "length": 120, "category": "predictive-maintenance", "icon": "earlogo.png", "font": "Inter, sans-serif" }
+                    ];
+                    renderHotspots();
+                });
         }
-        renderHotspots();
     });
     </script>
 </body>
