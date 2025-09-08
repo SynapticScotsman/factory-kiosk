@@ -440,37 +440,41 @@
         });
 
         async function loadInitialConfig(forceDefault = false) {
-            const savedConfig = localStorage.getItem('hotspotConfig');
-            if (savedConfig && !forceDefault) {
-                try { 
-                    hotspotData = JSON.parse(savedConfig); 
-                } catch (e) { 
-                    localStorage.removeItem('hotspotConfig');
-                    hotspotData = [];
-                }
-            } 
-            
-            if (hotspotData.length === 0) {
+            let loaded = false;
+            if(!forceDefault) {
                 try {
                     const response = await fetch('./config.json');
                     if (response.ok) {
                         hotspotData = await response.json();
+                        loaded = true;
+                        console.log("Loaded from config.json");
                     } else { throw new Error('config.json not found'); }
                 } catch(e) {
-                    console.warn("config.json not found. Loading hardcoded default data.");
-                    hotspotData = [
-                        { "topic": "agv", "title": "AGV & SVG Tracking", "description": "Full description...", "media": "<iframe...>", "qrCode": "...", "text": "AGV & SVG<br>Tracking", "top": "80%", "left": "15%", "angle": -45, "length": 120, "category": "productivity", "icon": "eyelogo3.svg", "font": "Inter, sans-serif" },
-                        { "topic": "pick-place", "title": "Pick & Place", "description": "Full description...", "media": "<iframe...>", "qrCode": "...", "text": "Pick & Place", "top": "75%", "left": "25%", "angle": -45, "length": 120, "category": "productivity", "icon": "eyelogo3.svg", "font": "Inter, sans-serif" },
-                        { "topic": "conveyor", "title": "Conveyor Speed Measurement", "description": "Full description...", "media": "<iframe...>", "qrCode": "...", "text": "Conveyor Speed<br>Measurement", "top": "65%", "left": "50%", "angle": 135, "length": 120, "category": "productivity", "icon": "eyelogo3.svg", "font": "Inter, sans-serif" },
-                        { "topic": "barcode", "title": "Barcode Localization", "description": "Full description...", "media": "<iframe...>", "qrCode": "...", "text": "Barcode<br>Localization", "top": "60%", "left": "65%", "angle": 135, "length": 120, "category": "productivity", "icon": "eyelogo3.svg", "font": "Inter, sans-serif" },
-                        { "topic": "area-monitoring", "title": "Area Monitoring", "description": "Full description...", "media": "<iframe...>", "qrCode": "...", "text": "Area<br>Monitoring", "top": "40%", "left": "30%", "angle": -45, "length": 120, "category": "safety", "icon": "eyelogo3.svg", "font": "Inter, sans-serif" },
-                        { "topic": "spatter", "title": "Spatter Monitoring", "description": "Full description...", "media": "<iframe...>", "qrCode": "...", "text": "Spatter<br>Monitoring", "top": "70%", "left": "45%", "angle": 180, "length": 120, "category": "safety", "icon": "eyelogo3.svg", "font": "Inter, sans-serif" },
-                        { "topic": "fluid-dynamics", "title": "Fluid Dynamics Monitoring", "description": "Full description...", "media": "<iframe...>", "qrCode": "...", "text": "Fluid Dynamics<br>Monitoring", "top": "25%", "left": "85%", "angle": 45, "length": 120, "category": "safety", "icon": "eyelogo3.svg", "font": "Inter, sans-serif" },
-                        { "topic": "particle-size", "title": "Particle Size Monitoring", "description": "Full description...", "media": "<iframe...>", "qrCode": "...", "text": "Particle Size<br>Monitoring", "top": "40%", "left": "70%", "angle": 45, "length": 120, "category": "quality", "icon": "eyelogo3.svg", "font": "Inter, sans-serif" },
-                        { "topic": "high-speed", "title": "High-Speed Counting", "description": "Full description...", "media": "<iframe...>", "qrCode": "...", "text": "High-Speed<br>Counting", "top": "55%", "left": "80%", "angle": 90, "length": 120, "category": "quality", "icon": "eyelogo3.svg", "font": "Inter, sans-serif" },
-                        { "topic": "vibration", "title": "Vibration Measurement", "description": "Full description...", "media": "<iframe...>", "qrCode": "...", "text": "Vibration<br>Measurement", "top": "50%", "left": "40%", "angle": -135, "length": 120, "category": "predictive-maintenance", "icon": "earlogo2.svg", "font": "Inter, sans-serif" }
-                    ];
+                    console.warn(e.message);
                 }
+            }
+            
+            if (!loaded) {
+                const savedConfig = localStorage.getItem('hotspotConfig');
+                if (savedConfig) {
+                    try { 
+                        hotspotData = JSON.parse(savedConfig); 
+                        if (hotspotData.length > 0) {
+                            loaded = true;
+                            console.log("Loaded from local storage");
+                        }
+                    } catch (e) { 
+                        localStorage.removeItem('hotspotConfig');
+                    }
+                }
+            }
+
+            if (!loaded) {
+                console.warn("No valid config found, loading hardcoded default data.");
+                hotspotData = [
+                    { "topic": "agv", "title": "AGV & SVG Tracking", "description": "Full description...", "media": "<iframe...>", "qrCode": "...", "text": "AGV & SVG<br>Tracking", "top": "80%", "left": "15%", "angle": -45, "length": 120, "category": "productivity", "icon": "eyelogo3.svg", "font": "Inter, sans-serif" },
+                    { "topic": "vibration", "title": "Vibration Measurement", "description": "Full description...", "media": "<iframe...>", "qrCode": "...", "text": "Vibration<br>Measurement", "top": "50%", "left": "40%", "angle": -135, "length": 120, "category": "predictive-maintenance", "icon": "earlogo2.svg", "font": "Inter, sans-serif" }
+                ];
             }
             renderHotspots();
         }
