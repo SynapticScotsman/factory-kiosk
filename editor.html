@@ -53,12 +53,8 @@
             width: 100%; 
             border-radius: 1rem; 
             overflow: hidden; 
-        }
-
-        .factory-image {
-            display: block;
-            width: 100%;
-            height: auto;
+            background: url('./Artboard 1@4x.png') center/cover no-repeat; 
+            aspect-ratio: 1400/788; 
         }
         
         /* --- Hotspot Styles --- */
@@ -89,9 +85,9 @@
         .hotspot:hover { transform: translate(-50%, -50%) scale(1.05); }
         .hotspot-icon { 
             position: absolute; 
-            width: 65%; 
-            height: 65%;
-            top: -33%;
+            width: 60px;
+            height: 60px;
+            top: -30px;
             left: 50%; 
             transform: translateX(-50%); 
             filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3)); 
@@ -193,8 +189,8 @@
                  <div class="control-group">
                     <label for="hotspot-icon-select">Icon</label>
                     <select id="hotspot-icon-select">
-                        <option value="eyelogo.png">Eye</option>
-                        <option value="earlogo.png">Ear</option>
+                        <option value="eyelogo3.svg">Eye</option>
+                        <option value="earlogo2.svg">Ear</option>
                     </select>
                 </div>
                 <div class="control-group">
@@ -298,7 +294,7 @@
             qrCodeInput.value = data.qrCode || '';
             textInput.value = data.text || '';
             categorySelect.value = data.category || 'productivity';
-            iconSelect.value = data.icon || 'eyelogo.png';
+            iconSelect.value = data.icon || 'eyelogo3.svg';
             fontSelect.value = data.font || 'Inter, sans-serif';
             topSlider.value = parseFloat(data.top) || 50;
             leftSlider.value = parseFloat(data.left) || 50;
@@ -444,35 +440,30 @@
         });
 
         async function loadInitialConfig(forceDefault = false) {
+            let loaded = false;
             const savedConfig = localStorage.getItem('hotspotConfig');
+            
             if (savedConfig && !forceDefault) {
                 try { 
                     hotspotData = JSON.parse(savedConfig); 
+                    if (hotspotData.length > 0) loaded = true;
                 } catch (e) { 
                     localStorage.removeItem('hotspotConfig');
-                    hotspotData = [];
                 }
             } 
             
-            if (hotspotData.length === 0) {
+            if (!loaded) {
                 try {
                     const response = await fetch('./config.json');
                     if (response.ok) {
                         hotspotData = await response.json();
+                        loaded = true;
                     } else { throw new Error('config.json not found'); }
                 } catch(e) {
-                    console.warn("config.json not found. Loading hardcoded default data.");
+                    console.warn(e.message, "Loading hardcoded default data.");
                     hotspotData = [
-                        { "topic": "agv", "title": "AGV & SVG Tracking", "description": "Full description for AGV & SVG Tracking goes here...", "media": "<iframe width='100%' height='450' src='https://www.youtube.com/embed/UAnSuj0zZ3Y' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' allowfullscreen></iframe>", "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://www.prophesee.ai/event-based-vision/", "text": "AGV & SVG<br>Tracking", "top": "80%", "left": "15%", "angle": -45, "length": 120, "category": "productivity", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
-                        { "topic": "pick-place", "title": "Pick & Place", "description": "Full description for Pick & Place...", "media": "<iframe src='https://www.youtube.com/embed/UAnSuj0zZ3Y'></iframe>", "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com", "text": "Pick & Place", "top": "75%", "left": "25%", "angle": -45, "length": 120, "category": "productivity", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
-                        { "topic": "conveyor", "title": "Conveyor Speed Measurement", "description": "Full description...", "media": "<iframe src='https://www.youtube.com/embed/UAnSuj0zZ3Y'></iframe>", "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com", "text": "Conveyor Speed<br>Measurement", "top": "65%", "left": "50%", "angle": 135, "length": 120, "category": "productivity", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
-                        { "topic": "barcode", "title": "Barcode Localization", "description": "Full description...", "media": "<iframe src='https://www.youtube.com/embed/UAnSuj0zZ3Y'></iframe>", "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com", "text": "Barcode<br>Localization", "top": "60%", "left": "65%", "angle": 135, "length": 120, "category": "productivity", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
-                        { "topic": "area-monitoring", "title": "Area Monitoring", "description": "Full description...", "media": "<iframe src='https://www.youtube.com/embed/UAnSuj0zZ3Y'></iframe>", "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com", "text": "Area<br>Monitoring", "top": "40%", "left": "30%", "angle": -45, "length": 120, "category": "safety", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
-                        { "topic": "spatter", "title": "Spatter Monitoring", "description": "Full description...", "media": "<iframe src='https://www.youtube.com/embed/UAnSuj0zZ3Y'></iframe>", "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com", "text": "Spatter<br>Monitoring", "top": "70%", "left": "45%", "angle": 180, "length": 120, "category": "safety", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
-                        { "topic": "fluid-dynamics", "title": "Fluid Dynamics Monitoring", "description": "Full description...", "media": "<iframe src='https://www.youtube.com/embed/UAnSuj0zZ3Y'></iframe>", "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com", "text": "Fluid Dynamics<br>Monitoring", "top": "25%", "left": "85%", "angle": 45, "length": 120, "category": "safety", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
-                        { "topic": "particle-size", "title": "Particle Size Monitoring", "description": "Full description...", "media": "<iframe src='https://www.youtube.com/embed/UAnSuj0zZ3Y'></iframe>", "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com", "text": "Particle Size<br>Monitoring", "top": "40%", "left": "70%", "angle": 45, "length": 120, "category": "quality", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
-                        { "topic": "high-speed", "title": "High-Speed Counting", "description": "Full description...", "media": "<iframe src='https://www.youtube.com/embed/UAnSuj0zZ3Y'></iframe>", "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com", "text": "High-Speed<br>Counting", "top": "55%", "left": "80%", "angle": 90, "length": 120, "category": "quality", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
-                        { "topic": "vibration", "title": "Vibration Measurement", "description": "Full description...", "media": "<iframe src='https://www.youtube.com/embed/UAnSuj0zZ3Y'></iframe>", "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com", "text": "Vibration<br>Measurement", "top": "50%", "left": "40%", "angle": -135, "length": 120, "category": "predictive-maintenance", "icon": "earlogo.png", "font": "Inter, sans-serif" }
+                        { "topic": "agv", "title": "AGV & SVG Tracking", "description": "Full description...", "media": "<iframe...>", "qrCode": "...", "text": "AGV & SVG<br>Tracking", "top": "80%", "left": "15%", "angle": -45, "length": 120, "category": "productivity", "icon": "eyelogo3.svg", "font": "Inter, sans-serif" },
+                        { "topic": "vibration", "title": "Vibration Measurement", "description": "Full description...", "media": "<iframe...>", "qrCode": "...", "text": "Vibration<br>Measurement", "top": "50%", "left": "40%", "angle": -135, "length": 120, "category": "predictive-maintenance", "icon": "earlogo2.svg", "font": "Inter, sans-serif" }
                     ];
                 }
             }
