@@ -58,52 +58,32 @@
         }
         
         /* --- Hotspot Styles --- */
-        .hotspot { 
-            position: absolute; 
-            width: 90px;
-            height: 90px;
-            border-radius: 50%; 
-            cursor: move; 
-            transform: translate(-50%, -50%); 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: flex-end; 
-            align-items: center; 
-            text-align: center; 
-            color: white; 
-            font-weight: 600; 
-            line-height: 1.2; 
-            text-transform: uppercase; 
-            border: 2px solid rgba(255, 255, 255, 0.7); 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2); 
-            transition: transform 0.1s, box-shadow 0.1s; 
-            padding-bottom: 20px;
-            box-sizing: border-box; 
-            user-select: none; 
-        }
+        .hotspot { position: absolute; width: 90px; height: 90px; border-radius: 50%; cursor: move; transform: translate(-50%, -50%); display: flex; flex-direction: column; justify-content: flex-end; align-items: center; text-align: center; color: white; font-weight: 600; line-height: 1.2; text-transform: uppercase; border: 2px solid rgba(255, 255, 255, 0.7); box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: transform 0.1s, box-shadow 0.1s; padding-bottom: 20px; box-sizing: border-box; user-select: none; }
         .hotspot.selected { box-shadow: 0 0 0 4px #4299e1, 0 4px 15px rgba(0,0,0,0.2); z-index: 100; }
         .hotspot:hover { transform: translate(-50%, -50%) scale(1.05); }
-        .hotspot-icon { 
-            position: absolute; 
-            width: 60px;
-            height: 60px;
-            top: -30px;
-            left: 50%; 
-            transform: translateX(-50%); 
-            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3)); 
-            pointer-events: none; 
-        }
+        .hotspot-icon { position: absolute; width: 60px; height: 60px; top: -30px; left: 50%; transform: translateX(-50%); filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3)); pointer-events: none; }
         .hotspot-text { font-size: 0.7rem; }
-        .hotspot.productivity { background-color: #4A90E2; }
-        .hotspot.safety { background-color: #f56565; }
-        .hotspot.quality { background-color: #ed64a6; }
-        .hotspot.predictive-maintenance { background-color: #4a5568; }
-        .hotspot::before { content: ''; position: absolute; top: 50%; left: 50%; width: 60px; height: var(--spotlight-length, 120px); z-index: -1; pointer-events: none; transform-origin: top center; transform: translateX(-50%) rotateZ(var(--spotlight-angle, 0deg)); clip-path: polygon(50% 0%, 0% 100%, 100% 100%); }
-        .hotspot.productivity::before { background: linear-gradient(to bottom, rgba(74, 144, 226, 0.7) 0%, rgba(74, 144, 226, 0) 100%); }
-        .hotspot.safety::before { background: linear-gradient(to bottom, rgba(245, 101, 101, 0.7) 0%, rgba(245, 101, 101, 0) 100%); }
-        .hotspot.quality::before { background: linear-gradient(to bottom, rgba(237, 100, 166, 0.7) 0%, rgba(237, 100, 166, 0) 100%); }
-        .hotspot.predictive-maintenance::before { background: linear-gradient(to bottom, rgba(74, 85, 104, 0.7) 0%, rgba(74, 85, 104, 0) 100%); }
-        
+        .hotspot.productivity { --spotlight-color: rgba(74, 144, 226, 0.7); background-color: #4A90E2; }
+        .hotspot.safety { --spotlight-color: rgba(245, 101, 101, 0.7); background-color: #f56565; }
+        .hotspot.quality { --spotlight-color: rgba(237, 100, 166, 0.7); background-color: #ed64a6; }
+        .hotspot.predictive-maintenance { --spotlight-color: rgba(74, 85, 104, 0.7); background-color: #4a5568; }
+
+        /* New Spotlight Beam Style */
+        .spotlight-beam {
+            content: ''; 
+            position: absolute; 
+            top: 50%; 
+            left: 50%; 
+            width: 60px; 
+            height: var(--spotlight-length, 120px); 
+            z-index: -1; 
+            pointer-events: none; 
+            transform-origin: top center; 
+            transform: translateX(-50%) rotateZ(var(--spotlight-angle, 0deg)); 
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            background: linear-gradient(to bottom, var(--spotlight-color) 0%, transparent 100%);
+        }
+
         /* --- Control Panel Styles --- */
         #control-panel h2 { margin-top: 0; font-size: 1.5rem; color: #2d3748; border-bottom: 1px solid #e2e8f0; padding-bottom: 1rem; margin-bottom: 1.5rem; }
         .editor-controls-scroll { overflow-y: auto; height: 100%; padding-right: 1rem; }
@@ -114,8 +94,8 @@
         .control-group input[type="range"] { padding: 0; }
         .button-group { margin-top: auto; padding-top: 1.5rem; border-top: 1px solid #e2e8f0; display: flex; flex-wrap: wrap; gap: 0.5rem; }
         .button-group button, .button-group a { display: block; flex-grow: 1; padding: 0.75rem; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; text-align: center; text-decoration: none; box-sizing: border-box; transition: background-color 0.2s; }
-        #add-hotspot { background-color: #3182ce; color: white; }
-        #add-hotspot:hover { background-color: #2b6cb0; }
+        #add-hotspot, #add-spotlight { background-color: #3182ce; color: white; }
+        #add-hotspot:hover, #add-spotlight:hover { background-color: #2b6cb0; }
         #delete-hotspot { background-color: #e53e3e; color: white; }
         #delete-hotspot:hover { background-color: #c53030; }
         #clear-config { background-color: #f6ad55; color: white; }
@@ -125,6 +105,32 @@
         #back-to-view { background-color: #f7fafc; border: 1px solid #e2e8f0; color: #2d3748; width: 100%; margin-top: 0.5rem; }
         #back-to-view:hover { background-color: #e2e8f0; }
         #no-selection { text-align: center; color: #718096; margin-top: 2rem; }
+
+        /* Styles for individual spotlight editor */
+        .spotlight-editor-item {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        .spotlight-editor-item header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .spotlight-editor-item h4 {
+            margin: 0;
+            font-size: 1rem;
+            color: #4a5568;
+        }
+        .remove-spotlight-btn {
+            background: none;
+            border: none;
+            color: #e53e3e;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -167,7 +173,7 @@
                     <label for="hotspot-text-input">Hotspot Label (use &lt;br&gt;)</label>
                     <input type="text" id="hotspot-text-input">
                 </div>
-                 <div class="control-group">
+                <div class="control-group">
                     <label for="hotspot-category">Category</label>
                     <select id="hotspot-category">
                         <option value="productivity">Productivity</option>
@@ -192,22 +198,10 @@
                         <option value="Poppins, sans-serif" style="font-family: 'Poppins', sans-serif;">Poppins</option>
                     </select>
                 </div>
-                 <div class="control-group">
-                    <label for="hotspot-top-slider">Vertical Position (%)</label>
-                    <input type="range" id="hotspot-top-slider" min="0" max="100" step="0.1">
-                </div>
-                <div class="control-group">
-                    <label for="hotspot-left-slider">Horizontal Position (%)</label>
-                    <input type="range" id="hotspot-left-slider" min="0" max="100" step="0.1">
-                </div>
-                <div class="control-group">
-                    <label for="spotlight-angle-slider">Spotlight Angle (deg)</label>
-                    <input type="range" id="spotlight-angle-slider" min="-180" max="180" value="0">
-                </div>
-                <div class="control-group">
-                    <label for="spotlight-length-slider">Spotlight Length (px)</label>
-                    <input type="range" id="spotlight-length-slider" min="50" max="300" value="120">
-                </div>
+                <hr style="border-color: #e2e8f0; margin: 1rem 0;">
+                <h4>Spotlights</h4>
+                <div id="spotlight-editor-list"></div>
+                <button id="add-spotlight" style="width:100%; padding: 0.5rem; margin-top: 1rem;">+ Add Spotlight</button>
             </div>
             <div id="no-selection">
                 <p>Click a hotspot to edit it, or add a new one.</p>
@@ -215,7 +209,7 @@
         </div>
 
         <div class="button-group">
-            <button id="add-hotspot">+ Add</button>
+            <button id="add-hotspot">+ Add Hotspot</button>
             <button id="delete-hotspot" style="display:none;">- Delete</button>
             <button id="clear-config">Clear Saved Edits</button>
             <button id="save-config">💾 Save & Download</button>
@@ -228,6 +222,7 @@
         const factoryContainer = document.getElementById('factory-container');
         const hotspotControls = document.getElementById('hotspot-controls');
         const noSelectionPanel = document.getElementById('no-selection');
+        const spotlightEditorList = document.getElementById('spotlight-editor-list');
         
         const hotspotSelect = document.getElementById('hotspot-select');
         const titleInput = document.getElementById('hotspot-title-input');
@@ -238,15 +233,12 @@
         const categorySelect = document.getElementById('hotspot-category');
         const iconSelect = document.getElementById('hotspot-icon-select');
         const fontSelect = document.getElementById('hotspot-font-select');
-        const topSlider = document.getElementById('hotspot-top-slider');
-        const leftSlider = document.getElementById('hotspot-left-slider');
-        const angleSlider = document.getElementById('spotlight-angle-slider');
-        const lengthSlider = document.getElementById('spotlight-length-slider');
         
         const addButton = document.getElementById('add-hotspot');
         const deleteButton = document.getElementById('delete-hotspot');
         const saveButton = document.getElementById('save-config');
         const clearButton = document.getElementById('clear-config');
+        const addSpotlightButton = document.getElementById('add-spotlight');
         
         let hotspotData = [];
         let selectedHotspot = null;
@@ -261,10 +253,20 @@
                 hotspotEl.dataset.index = index;
                 hotspotEl.style.left = data.left;
                 hotspotEl.style.top = data.top;
-                hotspotEl.style.setProperty('--spotlight-angle', `${data.angle}deg`);
-                hotspotEl.style.setProperty('--spotlight-length', `${data.length}px`);
                 hotspotEl.style.fontFamily = data.font;
                 hotspotEl.innerHTML = `<img src="${data.icon}" class="hotspot-icon"><div class="hotspot-text">${data.text}</div>`;
+                
+                // Render spotlight beams
+                if (data.spotlights) {
+                    data.spotlights.forEach(spot => {
+                        const beam = document.createElement('div');
+                        beam.className = 'spotlight-beam';
+                        beam.style.setProperty('--spotlight-angle', `${spot.angle}deg`);
+                        beam.style.setProperty('--spotlight-length', `${spot.length}px`);
+                        hotspotEl.appendChild(beam);
+                    });
+                }
+
                 factoryContainer.appendChild(hotspotEl);
 
                 const option = document.createElement('option');
@@ -275,6 +277,54 @@
             addEventListeners();
         }
         
+        function renderSpotlightEditor(hotspotIndex) {
+            spotlightEditorList.innerHTML = '';
+            const data = hotspotData[hotspotIndex];
+            if (!data.spotlights) data.spotlights = [];
+
+            data.spotlights.forEach((spot, spotIndex) => {
+                const item = document.createElement('div');
+                item.className = 'spotlight-editor-item';
+                item.innerHTML = `
+                    <header>
+                        <h4>Spotlight ${spotIndex + 1}</h4>
+                        <button class="remove-spotlight-btn" data-spot-index="${spotIndex}">&times;</button>
+                    </header>
+                    <div class="control-group">
+                        <label>Angle (deg)</label>
+                        <input type="range" class="spotlight-angle-slider" min="-180" max="180" value="${spot.angle}">
+                    </div>
+                    <div class="control-group">
+                        <label>Length (px)</label>
+                        <input type="range" class="spotlight-length-slider" min="50" max="300" value="${spot.length}">
+                    </div>
+                `;
+                spotlightEditorList.appendChild(item);
+            });
+
+            // Add event listeners for the new controls
+            spotlightEditorList.querySelectorAll('.remove-spotlight-btn').forEach(btn => {
+                btn.onclick = () => {
+                    const spotIndex = btn.dataset.spotIndex;
+                    data.spotlights.splice(spotIndex, 1);
+                    renderHotspots();
+                    renderSpotlightEditor(hotspotIndex);
+                };
+            });
+            spotlightEditorList.querySelectorAll('.spotlight-angle-slider').forEach((slider, spotIndex) => {
+                slider.oninput = () => {
+                    data.spotlights[spotIndex].angle = slider.value;
+                    renderHotspots(); // Re-render to show visual change
+                };
+            });
+            spotlightEditorList.querySelectorAll('.spotlight-length-slider').forEach((slider, spotIndex) => {
+                slider.oninput = () => {
+                    data.spotlights[spotIndex].length = slider.value;
+                    renderHotspots(); // Re-render to show visual change
+                };
+            });
+        }
+
         function updateEditorPanel(index) {
             const data = hotspotData[index];
             if (!data) return;
@@ -286,10 +336,7 @@
             categorySelect.value = data.category || 'productivity';
             iconSelect.value = data.icon || 'eyelogo.png';
             fontSelect.value = data.font || 'Inter, sans-serif';
-            topSlider.value = parseFloat(data.top) || 50;
-            leftSlider.value = parseFloat(data.left) || 50;
-            angleSlider.value = data.angle || 0;
-            lengthSlider.value = data.length || 120;
+            renderSpotlightEditor(index);
         }
 
         function selectHotspot(index) {
@@ -321,25 +368,19 @@
                     e.preventDefault();
                     selectHotspot(hotspot.dataset.index);
                     const rect = factoryContainer.getBoundingClientRect();
-
                     document.onmousemove = function(moveEvent) {
                         let x = moveEvent.clientX - rect.left;
                         let y = moveEvent.clientY - rect.top;
                         x = Math.max(0, Math.min(x, rect.width));
                         y = Math.max(0, Math.min(y, rect.height));
-
-                        const xPercent = (x / rect.width * 100);
-                        const yPercent = (y / rect.height * 100);
-
-                        hotspot.style.left = `${xPercent.toFixed(2)}%`;
-                        hotspot.style.top = `${yPercent.toFixed(2)}%`;
-                        
-                        topSlider.value = yPercent;
-                        leftSlider.value = xPercent;
+                        const xPercent = (x / rect.width * 100).toFixed(2) + '%';
+                        const yPercent = (y / rect.height * 100).toFixed(2) + '%';
+                        hotspot.style.left = xPercent;
+                        hotspot.style.top = yPercent;
                         const data = hotspotData[hotspot.dataset.index];
                         if(data){
-                           data.left = `${xPercent.toFixed(2)}%`;
-                           data.top = `${yPercent.toFixed(2)}%`;
+                           data.left = xPercent;
+                           data.top = yPercent;
                         }
                     };
                     document.onmouseup = () => {
@@ -363,26 +404,19 @@
             data.category = categorySelect.value;
             data.icon = iconSelect.value;
             data.font = fontSelect.value;
-            data.top = `${topSlider.value}%`;
-            data.left = `${leftSlider.value}%`;
-            data.angle = angleSlider.value;
-            data.length = lengthSlider.value;
-
+            
             element.className = `hotspot selected ${data.category}`;
-            element.style.top = data.top;
-            element.style.left = data.left;
             element.style.fontFamily = data.font;
             element.querySelector('.hotspot-icon').src = data.icon;
             element.querySelector('.hotspot-text').innerHTML = data.text;
-            element.style.setProperty('--spotlight-angle', `${data.angle}deg`);
-            element.style.setProperty('--spotlight-length', `${data.length}px`);
-
+            
+            renderHotspots(); // Full re-render to update spotlights
             hotspotSelect.options[parseInt(index) + 1].textContent = data.title;
         }
 
         hotspotSelect.addEventListener('change', () => selectHotspot(hotspotSelect.value));
         
-        [titleInput, descriptionInput, mediaInput, qrCodeInput, textInput, categorySelect, iconSelect, fontSelect, topSlider, leftSlider, angleSlider, lengthSlider].forEach(input => {
+        [titleInput, descriptionInput, mediaInput, qrCodeInput, textInput, categorySelect, iconSelect, fontSelect].forEach(input => {
             input.addEventListener('input', () => {
                 if (selectedHotspot) {
                     applyChangesFromPanel(selectedHotspot.dataset.index);
@@ -390,10 +424,25 @@
             });
         });
 
+        addSpotlightButton.addEventListener('click', () => {
+            if(selectedHotspot){
+                const index = selectedHotspot.dataset.index;
+                const data = hotspotData[index];
+                if(data.spotlights) {
+                    data.spotlights.push({ angle: 0, length: 120 });
+                } else {
+                    data.spotlights = [{ angle: 0, length: 120 }];
+                }
+                renderHotspots();
+                renderSpotlightEditor(index);
+            }
+        });
+
         addButton.addEventListener('click', () => {
             const newHotspotData = {
                 topic: "new-topic-" + Date.now(), title: "New Hotspot", description: "Full description...", media: "<iframe>...</iframe>", qrCode: "http://...",
-                text: "New<br>Hotspot", top: "50%", left: "50%", angle: 0, length: 120, category: "productivity", font: "Inter, sans-serif", icon: "eyelogo.png"
+                text: "New<br>Hotspot", top: "50%", left: "50%", category: "productivity", font: "Inter, sans-serif", icon: "eyelogo.png",
+                spotlights: [{ angle: 0, length: 120 }]
             };
             hotspotData.push(newHotspotData);
             renderHotspots();
@@ -431,37 +480,26 @@
 
         async function loadInitialConfig() {
             const savedConfig = localStorage.getItem('hotspotConfig');
+            let initialData = [];
             if (savedConfig) {
-                try {
-                    hotspotData = JSON.parse(savedConfig);
-                } catch (e) {
-                    console.error("Error parsing saved config from localStorage", e);
-                    localStorage.removeItem('hotspotConfig'); // Clear corrupted data
-                }
+                try { initialData = JSON.parse(savedConfig); } catch (e) { console.error("Bad data in localStorage", e); }
             } 
             
-            if (hotspotData.length === 0) { // If storage was empty or corrupted
+            if (initialData.length === 0) {
                 try {
                     const response = await fetch('./config.json');
                     if (response.ok) {
-                        hotspotData = await response.json();
+                        initialData = await response.json();
                     } else { throw new Error('config.json not found'); }
                 } catch(e) {
                     console.warn("config.json not found. Loading hardcoded default data.");
-                    hotspotData = [
-                        { "topic": "agv", "title": "AGV & SVG Tracking", "description": "Full description for AGV & SVG Tracking goes here...", "media": "<iframe width='100%' height='450' src='https://www.youtube.com/embed/UAnSuj0zZ3Y' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' allowfullscreen></iframe>", "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://www.prophesee.ai/event-based-vision/", "text": "AGV & SVG<br>Tracking", "top": "80%", "left": "15%", "angle": -45, "length": 120, "category": "productivity", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
-                        { "topic": "pick-place", "title": "Pick & Place", "description": "Full description for Pick & Place...", "media": "<iframe src='https://www.youtube.com/embed/UAnSuj0zZ3Y'></iframe>", "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com", "text": "Pick & Place", "top": "75%", "left": "25%", "angle": -45, "length": 120, "category": "productivity", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
-                        { "topic": "conveyor", "title": "Conveyor Speed Measurement", "description": "Full description...", "media": "<iframe src='https://www.youtube.com/embed/UAnSuj0zZ3Y'></iframe>", "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com", "text": "Conveyor Speed<br>Measurement", "top": "65%", "left": "50%", "angle": 135, "length": 120, "category": "productivity", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
-                        { "topic": "barcode", "title": "Barcode Localization", "description": "Full description...", "media": "<iframe src='https://www.youtube.com/embed/UAnSuj0zZ3Y'></iframe>", "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com", "text": "Barcode<br>Localization", "top": "60%", "left": "65%", "angle": 135, "length": 120, "category": "productivity", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
-                        { "topic": "area-monitoring", "title": "Area Monitoring", "description": "Full description...", "media": "<iframe src='https://www.youtube.com/embed/UAnSuj0zZ3Y'></iframe>", "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com", "text": "Area<br>Monitoring", "top": "40%", "left": "30%", "angle": -45, "length": 120, "category": "safety", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
-                        { "topic": "spatter", "title": "Spatter Monitoring", "description": "Full description...", "media": "<iframe src='https://www.youtube.com/embed/UAnSuj0zZ3Y'></iframe>", "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com", "text": "Spatter<br>Monitoring", "top": "70%", "left": "45%", "angle": 180, "length": 120, "category": "safety", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
-                        { "topic": "fluid-dynamics", "title": "Fluid Dynamics Monitoring", "description": "Full description...", "media": "<iframe src='https://www.youtube.com/embed/UAnSuj0zZ3Y'></iframe>", "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com", "text": "Fluid Dynamics<br>Monitoring", "top": "25%", "left": "85%", "angle": 45, "length": 120, "category": "safety", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
-                        { "topic": "particle-size", "title": "Particle Size Monitoring", "description": "Full description...", "media": "<iframe src='https://www.youtube.com/embed/UAnSuj0zZ3Y'></iframe>", "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com", "text": "Particle Size<br>Monitoring", "top": "40%", "left": "70%", "angle": 45, "length": 120, "category": "quality", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
-                        { "topic": "high-speed", "title": "High-Speed Counting", "description": "Full description...", "media": "<iframe src='https://www.youtube.com/embed/UAnSuj0zZ3Y'></iframe>", "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com", "text": "High-Speed<br>Counting", "top": "55%", "left": "80%", "angle": 90, "length": 120, "category": "quality", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
-                        { "topic": "vibration", "title": "Vibration Measurement", "description": "Full description...", "media": "<iframe src='https://www.youtube.com/embed/UAnSuj0zZ3Y'></iframe>", "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com", "text": "Vibration<br>Measurement", "top": "50%", "left": "40%", "angle": -135, "length": 120, "category": "predictive-maintenance", "icon": "earlogo.png", "font": "Inter, sans-serif" }
+                    initialData = [
+                        { "topic": "agv", "title": "AGV & SVG Tracking", "description": "Full description...", "media": "<iframe...>", "qrCode": "...", "text": "AGV & SVG<br>Tracking", "top": "80%", "left": "15%", "category": "productivity", "icon": "eyelogo.png", "font": "Inter, sans-serif", "spotlights": [{"angle": -45, "length": 120}] },
+                        { "topic": "vibration", "title": "Vibration Measurement", "description": "Full description...", "media": "<iframe...>", "qrCode": "...", "text": "Vibration<br>Measurement", "top": "50%", "left": "40%", "category": "predictive-maintenance", "icon": "earlogo.png", "font": "Inter, sans-serif", "spotlights": [{"angle": -135, "length": 120}]}
                     ];
                 }
             }
+            hotspotData = initialData;
             renderHotspots();
         }
 
