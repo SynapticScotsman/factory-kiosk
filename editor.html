@@ -239,7 +239,6 @@
         function updateEditorPanel(index) {
             const data = hotspotData[index];
             if (!data) return;
-            // Use `|| ''` to prevent "undefined" from appearing in fields
             titleInput.value = data.title || '';
             descriptionInput.value = data.description || '';
             mediaInput.value = data.media || '';
@@ -394,8 +393,15 @@
         async function loadInitialConfig() {
             const savedConfig = localStorage.getItem('hotspotConfig');
             if (savedConfig) {
-                hotspotData = JSON.parse(savedConfig);
-            } else {
+                try {
+                    hotspotData = JSON.parse(savedConfig);
+                } catch (e) {
+                    console.error("Error parsing saved config from localStorage", e);
+                    localStorage.removeItem('hotspotConfig'); // Clear corrupted data
+                }
+            } 
+            
+            if (hotspotData.length === 0) { // If storage was empty or corrupted
                 try {
                     const response = await fetch('./config.json');
                     if (response.ok) {
@@ -417,7 +423,7 @@
                     ];
                 }
             }
-            createHotspots();
+            renderHotspots();
         }
 
         loadInitialConfig();
