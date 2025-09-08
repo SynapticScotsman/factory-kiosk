@@ -20,10 +20,9 @@
             box-sizing: border-box;
         }
 
-        /* This wrapper ensures the content scales within the viewport */
         .image-frame {
             background-color: #fff;
-            padding: 2rem; /* This creates the white border */
+            padding: 2rem;
             border-radius: 1rem;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             max-width: 100%;
@@ -36,7 +35,6 @@
             position: relative; 
             max-width: 1400px; 
             width: 100%; 
-            /* The aspect-ratio is now handled by the image itself */
         }
         
         .factory-image {
@@ -69,16 +67,19 @@
             box-sizing: border-box; 
         }
         .hotspot:hover { transform: translate(-50%, -50%) scale(1.05); }
+        
+        /* UPDATED: Hotspot icon now uses relative units for perfect scaling */
         .hotspot-icon { 
             position: absolute; 
-            width: 60px; 
-            height: 60px; 
-            top: -30px; 
+            width: 65%; /* Scales with the parent hotspot circle */
+            height: 65%; /* Scales with the parent hotspot circle */
+            top: -33%; /* Relative positioning */
             left: 50%; 
             transform: translateX(-50%); 
             filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3)); 
             pointer-events: none; 
         }
+
         .hotspot-text { font-size: 0.7rem; }
         .hotspot.productivity { background-color: #4A90E2; }
         .hotspot.safety { background-color: #f56565; }
@@ -124,17 +125,11 @@
         @keyframes fadeIn-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .content-fade-in { animation: fadeIn-up 0.6s ease-out forwards; }
 
-        /* --- Responsive Scaling for Smaller Screens --- */
-        @media (max-width: 768px) { /* Tablets and below */
+        @media (max-width: 768px) {
             .hotspot {
                 width: 70px;
                 height: 70px;
                 padding-bottom: 12px;
-            }
-            .hotspot-icon {
-                width: 45px;
-                height: 45px;
-                top: -22px;
             }
             .hotspot-text {
                 font-size: 0.55rem;
@@ -143,16 +138,11 @@
                 padding: 1rem;
             }
         }
-        @media (max-width: 480px) { /* Phones */
+        @media (max-width: 480px) {
              .hotspot {
                 width: 50px;
                 height: 50px;
                 padding-bottom: 8px;
-            }
-            .hotspot-icon {
-                width: 30px;
-                height: 30px;
-                top: -15px;
             }
             .hotspot-text {
                 font-size: 0.4rem;
@@ -199,7 +189,7 @@
 
     <script>
         const factoryContainer = document.getElementById('factory-container');
-        let loadedHotspotConfig = []; // Will store the fully loaded config
+        let loadedHotspotConfig = [];
 
         async function loadHotspots() {
             let hotspotData;
