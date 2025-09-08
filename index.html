@@ -199,7 +199,7 @@
 
     <script>
         const factoryContainer = document.getElementById('factory-container');
-        let loadedHotspotConfig = [];
+        let loadedHotspotConfig = []; // Will store the fully loaded config
 
         async function loadHotspots() {
             let hotspotData;
@@ -267,7 +267,7 @@
             const data = loadedHotspotConfig.find(h => h.topic === topic);
             if (!data) return; 
             modalTitle.textContent = data.title; 
-            modalDescription.textContent = data.description.substring(0, 150) + '...'; 
+            modalDescription.innerHTML = data.description;
             learnMoreButton.textContent = 'Learn More →'; 
             learnMoreButton.dataset.topic = topic; 
             modal.classList.add('active'); 
@@ -293,7 +293,7 @@
             void detailsDescription.offsetWidth; 
             
             detailsTitle.textContent = data.title; 
-            detailsDescription.textContent = data.description; 
+            detailsDescription.innerHTML = data.description;
             detailsMedia.innerHTML = data.media; 
             
             detailsTitle.classList.add('content-fade-in'); 
