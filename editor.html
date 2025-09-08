@@ -37,33 +37,86 @@
             flex-direction: column;
         }
         
+        /* New Frame Element */
+        .image-frame {
+            background-color: #fff;
+            padding: 2rem; /* This creates the white frame */
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+        }
+        
         /* --- Factory View --- */
         .factory-container { 
             position: relative; 
-            max-width: 1400px; 
+            max-width: 1200px; 
             width: 100%; 
-            margin: auto; 
             border-radius: 1rem; 
             overflow: hidden; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
-            background: url('Artboard 1@4x.png') center/cover no-repeat; 
-            aspect-ratio: 1400/788; 
+        }
+
+        .factory-image {
+            display: block;
+            width: 100%;
+            height: auto;
         }
         
         /* --- Hotspot Styles --- */
-        .hotspot { position: absolute; width: 110px; height: 110px; border-radius: 50%; cursor: move; transform: translate(-50%, -50%); display: flex; flex-direction: column; justify-content: flex-end; align-items: center; text-align: center; color: white; font-weight: 600; line-height: 1.2; text-transform: uppercase; border: 2px solid rgba(255, 255, 255, 0.7); box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: transform 0.3s ease, box-shadow 0.3s ease; padding-bottom: 25px; box-sizing: border-box; user-select: none; }
-        .hotspot:hover, .hotspot.selected { transform: translate(-50%, -50%) scale(1.05); box-shadow: 0 0 20px 5px #ffdd00; z-index: 10; }
-        .hotspot-icon { position: absolute; width: 75px; height: 75px; top: -38px; left: 50%; transform: translateX(-50%); filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3)); pointer-events: none; }
-        .hotspot-text { font-size: 0.8rem; }
-        .hotspot.productivity { background-color: #4A90E2; }
-        .hotspot.safety { background-color: #f56565; }
-        .hotspot.quality { background-color: #ed64a6; }
-        .hotspot.predictive-maintenance { background-color: #4a5568; }
-        .hotspot::before { content: ''; position: absolute; top: 50%; left: 50%; width: 60px; height: var(--spotlight-length, 120px); z-index: -1; pointer-events: none; transform-origin: top center; transform: translateX(-50%) rotateZ(var(--spotlight-angle, 0deg)); clip-path: polygon(50% 0%, 0% 100%, 100% 100%); }
-        .hotspot.productivity::before { background: linear-gradient(to bottom, rgba(74, 144, 226, 0.7) 0%, rgba(74, 144, 226, 0) 100%); }
-        .hotspot.safety::before { background: linear-gradient(to bottom, rgba(245, 101, 101, 0.7) 0%, rgba(245, 101, 101, 0) 100%); }
-        .hotspot.quality::before { background: linear-gradient(to bottom, rgba(237, 100, 166, 0.7) 0%, rgba(237, 100, 166, 0) 100%); }
-        .hotspot.predictive-maintenance::before { background: linear-gradient(to bottom, rgba(74, 85, 104, 0.7) 0%, rgba(74, 85, 104, 0) 100%); }
+        .hotspot { 
+            position: absolute; 
+            width: 90px;
+            height: 90px;
+            border-radius: 50%; 
+            cursor: move; 
+            transform: translate(-50%, -50%); 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: flex-end; 
+            align-items: center; 
+            text-align: center; 
+            color: white; 
+            font-weight: 600; 
+            line-height: 1.2; 
+            text-transform: uppercase; 
+            border: 2px solid rgba(255, 255, 255, 0.7); 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2); 
+            transition: transform 0.1s, box-shadow 0.1s; 
+            padding-bottom: 20px;
+            box-sizing: border-box; 
+            user-select: none; 
+        }
+        .hotspot.selected { box-shadow: 0 0 0 4px #4299e1, 0 4px 15px rgba(0,0,0,0.2); z-index: 100; }
+        .hotspot:hover { transform: translate(-50%, -50%) scale(1.05); }
+        .hotspot-icon { 
+            position: absolute; 
+            width: 65%; 
+            height: 65%;
+            top: -33%;
+            left: 50%; 
+            transform: translateX(-50%); 
+            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3)); 
+            pointer-events: none; 
+        }
+        .hotspot-text { font-size: 0.7rem; }
+        .hotspot.productivity { --spotlight-color: rgba(74, 144, 226, 0.7); background-color: #4A90E2; }
+        .hotspot.safety { --spotlight-color: rgba(245, 101, 101, 0.7); background-color: #f56565; }
+        .hotspot.quality { --spotlight-color: rgba(237, 100, 166, 0.7); background-color: #ed64a6; }
+        .hotspot.predictive-maintenance { --spotlight-color: rgba(74, 85, 104, 0.7); background-color: #4a5568; }
+
+        .hotspot::before {
+            content: ''; 
+            position: absolute; 
+            top: 50%; 
+            left: 50%; 
+            width: 60px; 
+            height: var(--spotlight-length, 120px); 
+            z-index: -1; 
+            pointer-events: none; 
+            transform-origin: top center; 
+            transform: translateX(-50%) rotateZ(var(--spotlight-angle, 0deg)); 
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            background: linear-gradient(to bottom, var(--spotlight-color) 0%, transparent 100%);
+        }
         
         /* --- Control Panel Styles --- */
         #control-panel h2 { margin-top: 0; font-size: 1.5rem; color: #2d3748; border-bottom: 1px solid #e2e8f0; padding-bottom: 1rem; margin-bottom: 1.5rem; }
@@ -79,6 +132,8 @@
         #add-hotspot:hover { background-color: #2b6cb0; }
         #delete-hotspot { background-color: #e53e3e; color: white; }
         #delete-hotspot:hover { background-color: #c53030; }
+        #clear-config { background-color: #f6ad55; color: white; }
+        #clear-config:hover { background-color: #dd6b20; }
         #save-config { background-color: #38a169; color: white; width: 100%; }
         #save-config:hover { background-color: #2f855a; }
         #back-to-view { background-color: #f7fafc; border: 1px solid #e2e8f0; color: #2d3748; width: 100%; margin-top: 0.5rem; }
@@ -89,8 +144,10 @@
 <body>
 
     <div id="editor-container">
-        <div class="factory-container" id="factory-container">
-            <!-- Hotspots will be generated by JavaScript -->
+        <div class="image-frame">
+            <div class="factory-container" id="factory-container">
+                <!-- Draggable hotspots will be generated here -->
+            </div>
         </div>
     </div>
 
@@ -115,10 +172,23 @@
                     <label for="hotspot-media-input">Media Embed Code</label>
                     <textarea id="hotspot-media-input" rows="3"></textarea>
                 </div>
+                 <div class="control-group">
+                    <label for="hotspot-qrcode-input">QR Code Image URL</label>
+                    <input type="text" id="hotspot-qrcode-input">
+                </div>
                 <hr style="border-color: #e2e8f0; margin: 1rem 0;">
                 <div class="control-group">
                     <label for="hotspot-text-input">Hotspot Label (use &lt;br&gt;)</label>
                     <input type="text" id="hotspot-text-input">
+                </div>
+                <div class="control-group">
+                    <label for="hotspot-category">Category</label>
+                    <select id="hotspot-category">
+                        <option value="productivity">Productivity</option>
+                        <option value="safety">Safety</option>
+                        <option value="quality">Quality</option>
+                        <option value="predictive-maintenance">Predictive Maintenance</option>
+                    </select>
                 </div>
                  <div class="control-group">
                     <label for="hotspot-icon-select">Icon</label>
@@ -135,6 +205,14 @@
                         <option value="Montserrat, sans-serif" style="font-family: 'Montserrat', sans-serif;">Montserrat</option>
                         <option value="Poppins, sans-serif" style="font-family: 'Poppins', sans-serif;">Poppins</option>
                     </select>
+                </div>
+                 <div class="control-group">
+                    <label for="hotspot-top-slider">Vertical Position (%)</label>
+                    <input type="range" id="hotspot-top-slider" min="0" max="100" step="0.1">
+                </div>
+                <div class="control-group">
+                    <label for="hotspot-left-slider">Horizontal Position (%)</label>
+                    <input type="range" id="hotspot-left-slider" min="0" max="100" step="0.1">
                 </div>
                 <div class="control-group">
                     <label for="spotlight-angle-slider">Spotlight Angle (deg)</label>
@@ -153,13 +231,14 @@
         <div class="button-group">
             <button id="add-hotspot">+ Add</button>
             <button id="delete-hotspot" style="display:none;">- Delete</button>
+            <button id="clear-config">Clear Saved Edits</button>
             <button id="save-config">💾 Save & Download</button>
             <a href="index.html" id="back-to-view">↩️ View Page</a>
         </div>
     </aside>
 
     <script>
-    document.addEventListener('DOMContentLoaded', async () => {
+    document.addEventListener('DOMContentLoaded', () => {
         const factoryContainer = document.getElementById('factory-container');
         const hotspotControls = document.getElementById('hotspot-controls');
         const noSelectionPanel = document.getElementById('no-selection');
@@ -168,15 +247,20 @@
         const titleInput = document.getElementById('hotspot-title-input');
         const descriptionInput = document.getElementById('hotspot-description-input');
         const mediaInput = document.getElementById('hotspot-media-input');
+        const qrCodeInput = document.getElementById('hotspot-qrcode-input');
         const textInput = document.getElementById('hotspot-text-input');
+        const categorySelect = document.getElementById('hotspot-category');
         const iconSelect = document.getElementById('hotspot-icon-select');
         const fontSelect = document.getElementById('hotspot-font-select');
+        const topSlider = document.getElementById('hotspot-top-slider');
+        const leftSlider = document.getElementById('hotspot-left-slider');
         const angleSlider = document.getElementById('spotlight-angle-slider');
         const lengthSlider = document.getElementById('spotlight-length-slider');
         
         const addButton = document.getElementById('add-hotspot');
         const deleteButton = document.getElementById('delete-hotspot');
         const saveButton = document.getElementById('save-config');
+        const clearButton = document.getElementById('clear-config');
         
         let hotspotData = [];
         let selectedHotspot = null;
@@ -211,9 +295,13 @@
             titleInput.value = data.title || '';
             descriptionInput.value = data.description || '';
             mediaInput.value = data.media || '';
+            qrCodeInput.value = data.qrCode || '';
             textInput.value = data.text || '';
+            categorySelect.value = data.category || 'productivity';
             iconSelect.value = data.icon || 'eyelogo.png';
             fontSelect.value = data.font || 'Inter, sans-serif';
+            topSlider.value = parseFloat(data.top) || 50;
+            leftSlider.value = parseFloat(data.left) || 50;
             angleSlider.value = data.angle || 0;
             lengthSlider.value = data.length || 120;
         }
@@ -254,16 +342,18 @@
                         x = Math.max(0, Math.min(x, rect.width));
                         y = Math.max(0, Math.min(y, rect.height));
 
-                        const xPercent = (x / rect.width * 100).toFixed(2) + '%';
-                        const yPercent = (y / rect.height * 100).toFixed(2) + '%';
-                        
-                        hotspot.style.left = xPercent;
-                        hotspot.style.top = yPercent;
+                        const xPercent = (x / rect.width * 100);
+                        const yPercent = (y / rect.height * 100);
 
+                        hotspot.style.left = `${xPercent.toFixed(2)}%`;
+                        hotspot.style.top = `${yPercent.toFixed(2)}%`;
+                        
+                        topSlider.value = yPercent;
+                        leftSlider.value = xPercent;
                         const data = hotspotData[hotspot.dataset.index];
                         if(data){
-                           data.left = xPercent;
-                           data.top = yPercent;
+                           data.left = `${xPercent.toFixed(2)}%`;
+                           data.top = `${yPercent.toFixed(2)}%`;
                         }
                     };
                     document.onmouseup = () => {
@@ -282,13 +372,19 @@
             data.title = titleInput.value;
             data.description = descriptionInput.value;
             data.media = mediaInput.value;
+            data.qrCode = qrCodeInput.value;
             data.text = textInput.value;
+            data.category = categorySelect.value;
             data.icon = iconSelect.value;
             data.font = fontSelect.value;
+            data.top = `${topSlider.value}%`;
+            data.left = `${leftSlider.value}%`;
             data.angle = angleSlider.value;
             data.length = lengthSlider.value;
-            
+
             element.className = `hotspot selected ${data.category}`;
+            element.style.top = data.top;
+            element.style.left = data.left;
             element.style.fontFamily = data.font;
             element.querySelector('.hotspot-icon').src = data.icon;
             element.querySelector('.hotspot-text').innerHTML = data.text;
@@ -300,7 +396,7 @@
 
         hotspotSelect.addEventListener('change', () => selectHotspot(hotspotSelect.value));
         
-        [titleInput, descriptionInput, mediaInput, textInput, iconSelect, fontSelect, angleSlider, lengthSlider].forEach(input => {
+        [titleInput, descriptionInput, mediaInput, qrCodeInput, textInput, categorySelect, iconSelect, fontSelect, topSlider, leftSlider, angleSlider, lengthSlider].forEach(input => {
             input.addEventListener('input', () => {
                 if (selectedHotspot) {
                     applyChangesFromPanel(selectedHotspot.dataset.index);
@@ -310,9 +406,8 @@
 
         addButton.addEventListener('click', () => {
             const newHotspotData = {
-                topic: "new-topic-" + Date.now(), title: "New Hotspot", description: "Full description...", media: "<iframe>...</iframe>", 
-                text: "New<br>Hotspot", top: "50%", left: "50%", angle: 0, length: 120, 
-                category: "productivity", font: "Inter, sans-serif", icon: "eyelogo.png"
+                topic: "new-topic-" + Date.now(), title: "New Hotspot", description: "Full description...", media: "<iframe>...</iframe>", qrCode: "http://...",
+                text: "New<br>Hotspot", top: "50%", left: "50%", angle: 0, length: 120, category: "productivity", font: "Inter, sans-serif", icon: "eyelogo.png"
             };
             hotspotData.push(newHotspotData);
             renderHotspots();
@@ -340,34 +435,51 @@
             URL.revokeObjectURL(url);
             alert('Configuration saved to browser and downloaded as config.json!');
         });
-        
-        // --- CORRECTED Initial Load Logic ---
-        const savedConfig = localStorage.getItem('hotspotConfig');
-        if (savedConfig) {
-            hotspotData = JSON.parse(savedConfig);
-            renderHotspots();
-        } else {
-            fetch('./config.json')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('config.json not found, loading fallback.');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    hotspotData = data;
-                    renderHotspots();
-                })
-                .catch(error => {
-                    console.warn(error.message);
-                    // Hardcoded default data as a final fallback
+
+        clearButton.addEventListener('click', () => {
+            if(confirm("Are you sure you want to clear your saved edits? This will reload the default configuration from config.json.")){
+                localStorage.removeItem('hotspotConfig');
+                loadInitialConfig(true);
+            }
+        });
+
+        async function loadInitialConfig(forceDefault = false) {
+            const savedConfig = localStorage.getItem('hotspotConfig');
+            if (savedConfig && !forceDefault) {
+                try { 
+                    hotspotData = JSON.parse(savedConfig); 
+                } catch (e) { 
+                    localStorage.removeItem('hotspotConfig');
+                    hotspotData = [];
+                }
+            } 
+            
+            if (hotspotData.length === 0) {
+                try {
+                    const response = await fetch('./config.json');
+                    if (response.ok) {
+                        hotspotData = await response.json();
+                    } else { throw new Error('config.json not found'); }
+                } catch(e) {
+                    console.warn("config.json not found. Loading hardcoded default data.");
                     hotspotData = [
-                        { "topic": "agv", "title": "AGV & SVG Tracking", "description": "Boost your logistical efficiency...", "media": "<iframe...>", "text": "AGV & SVG<br>Tracking", "top": "80%", "left": "15%", "angle": -45, "length": 120, "category": "productivity", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
-                        { "topic": "vibration", "title": "Vibration Measurement", "description": "Prevent downtime before it happens...", "media": "<iframe...>", "text": "Vibration<br>Measurement", "top": "50%", "left": "40%", "angle": -135, "length": 120, "category": "predictive-maintenance", "icon": "earlogo.png", "font": "Inter, sans-serif" }
+                        { "topic": "agv", "title": "AGV & SVG Tracking", "description": "Full description for AGV & SVG Tracking goes here...", "media": "<iframe width='100%' height='450' src='https://www.youtube.com/embed/UAnSuj0zZ3Y' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' allowfullscreen></iframe>", "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://www.prophesee.ai/event-based-vision/", "text": "AGV & SVG<br>Tracking", "top": "80%", "left": "15%", "angle": -45, "length": 120, "category": "productivity", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
+                        { "topic": "pick-place", "title": "Pick & Place", "description": "Full description for Pick & Place...", "media": "<iframe src='https://www.youtube.com/embed/UAnSuj0zZ3Y'></iframe>", "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com", "text": "Pick & Place", "top": "75%", "left": "25%", "angle": -45, "length": 120, "category": "productivity", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
+                        { "topic": "conveyor", "title": "Conveyor Speed Measurement", "description": "Full description...", "media": "<iframe src='https://www.youtube.com/embed/UAnSuj0zZ3Y'></iframe>", "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com", "text": "Conveyor Speed<br>Measurement", "top": "65%", "left": "50%", "angle": 135, "length": 120, "category": "productivity", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
+                        { "topic": "barcode", "title": "Barcode Localization", "description": "Full description...", "media": "<iframe src='https://www.youtube.com/embed/UAnSuj0zZ3Y'></iframe>", "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com", "text": "Barcode<br>Localization", "top": "60%", "left": "65%", "angle": 135, "length": 120, "category": "productivity", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
+                        { "topic": "area-monitoring", "title": "Area Monitoring", "description": "Full description...", "media": "<iframe src='https://www.youtube.com/embed/UAnSuj0zZ3Y'></iframe>", "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com", "text": "Area<br>Monitoring", "top": "40%", "left": "30%", "angle": -45, "length": 120, "category": "safety", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
+                        { "topic": "spatter", "title": "Spatter Monitoring", "description": "Full description...", "media": "<iframe src='https://www.youtube.com/embed/UAnSuj0zZ3Y'></iframe>", "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com", "text": "Spatter<br>Monitoring", "top": "70%", "left": "45%", "angle": 180, "length": 120, "category": "safety", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
+                        { "topic": "fluid-dynamics", "title": "Fluid Dynamics Monitoring", "description": "Full description...", "media": "<iframe src='https://www.youtube.com/embed/UAnSuj0zZ3Y'></iframe>", "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com", "text": "Fluid Dynamics<br>Monitoring", "top": "25%", "left": "85%", "angle": 45, "length": 120, "category": "safety", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
+                        { "topic": "particle-size", "title": "Particle Size Monitoring", "description": "Full description...", "media": "<iframe src='https://www.youtube.com/embed/UAnSuj0zZ3Y'></iframe>", "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com", "text": "Particle Size<br>Monitoring", "top": "40%", "left": "70%", "angle": 45, "length": 120, "category": "quality", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
+                        { "topic": "high-speed", "title": "High-Speed Counting", "description": "Full description...", "media": "<iframe src='https://www.youtube.com/embed/UAnSuj0zZ3Y'></iframe>", "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com", "text": "High-Speed<br>Counting", "top": "55%", "left": "80%", "angle": 90, "length": 120, "category": "quality", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
+                        { "topic": "vibration", "title": "Vibration Measurement", "description": "Full description...", "media": "<iframe src='https://www.youtube.com/embed/UAnSuj0zZ3Y'></iframe>", "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com", "text": "Vibration<br>Measurement", "top": "50%", "left": "40%", "angle": -135, "length": 120, "category": "predictive-maintenance", "icon": "earlogo.png", "font": "Inter, sans-serif" }
                     ];
-                    renderHotspots();
-                });
+                }
+            }
+            renderHotspots();
         }
+
+        loadInitialConfig();
     });
     </script>
 </body>
