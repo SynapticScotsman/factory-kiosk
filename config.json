@@ -2,7 +2,7 @@
   {
     "topic": "agv",
     "title": "AGV & SVG Tracking",
-    "description": "Full description for AGV & SVG Tracking goes here.",
+    "description": "Advanced event-based vision provides unparalleled real-time tracking for Autonomous and Smart Guided Vehicles. By monitoring fleet movements with microsecond precision, it enables dynamic rerouting, collision avoidance, and seamless integration with warehouse management systems, significantly boosting logistical efficiency.",
     "media": "<iframe width='100%' height='450' src='https://www.youtube.com/embed/UAnSuj0zZ3Y' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' allowfullscreen></iframe>",
     "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com",
     "icon": "eyelogo3.svg",
@@ -16,8 +16,8 @@
   },
   {
     "topic": "pick-place",
-    "title": "Pick & Place",
-    "description": "Full description for Pick & Place goes here.",
+    "title": "Robotic Arm Monitoring",
+    "description": "<strong>Predictive Maintenance:</strong><br><br>• Developing standalone sensors for anomaly detection.<br>• Tested on Kuka and Omron arms under varying loads.<br>• Produces high-quality datasets and low-power anomaly detection algorithms, aiming for TRL6 prototypes.",
     "media": "<iframe width='100%' height='450' src='https://www.youtube.com/embed/UAnSuj0zZ3Y' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' allowfullscreen></iframe>",
     "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com",
     "icon": "eyelogo3.svg",
@@ -32,7 +32,7 @@
   {
     "topic": "conveyor",
     "title": "Conveyor Speed Measurement",
-    "description": "Full description for Conveyor Speed Measurement goes here.",
+    "description": "Tracking the flow of items on a conveyor in real-time allows for dynamic speed adjustments. This ensures perfect synchronization between different manufacturing stages, preventing bottlenecks and optimizing throughput for maximum productivity.",
     "media": "<iframe width='100%' height='450' src='https://www.youtube.com/embed/UAnSuj0zZ3Y' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' allowfullscreen></iframe>",
     "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com",
     "icon": "eyelogo3.svg",
@@ -47,7 +47,7 @@
   {
     "topic": "barcode",
     "title": "Barcode Localization",
-    "description": "Full description for Barcode Localization goes here.",
+    "description": "High temporal resolution allows for the instant location and decoding of barcodes, even when they are moving at high speed, are poorly printed, or at awkward angles. This eliminates missed scans and accelerates sorting and tracking operations.",
     "media": "<iframe width='100%' height='450' src='https://www.youtube.com/embed/UAnSuj0zZ3Y' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' allowfullscreen></iframe>",
     "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com",
     "icon": "eyelogo3.svg",
@@ -61,8 +61,8 @@
   },
   {
     "topic": "area-monitoring",
-    "title": "Area Monitoring",
-    "description": "Full description for Area Monitoring goes here.",
+    "title": "Sound Localisation",
+    "description": "<strong>Acoustic & Environmental Sensing:</strong><br><br>Using neuromorphic sensors for pinpointing sound sources in noisy environments — applicable to both industrial safety and defence.",
     "media": "<iframe width='100%' height='450' src='https://www.youtube.com/embed/UAnSuj0zZ3Y' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' allowfullscreen></iframe>",
     "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com",
     "icon": "eyelogo3.svg",
@@ -76,8 +76,8 @@
   },
   {
     "topic": "spatter",
-    "title": "Spatter Monitoring",
-    "description": "Full description for Spatter Monitoring goes here.",
+    "title": "Welding Spatter Analysis",
+    "description": "<strong>Quality Assurance:</strong><br><br>Combines event cameras with microphones to detect anomalous spatter patterns, improving defect detection.",
     "media": "<iframe width='100%' height='450' src='https://www.youtube.com/embed/UAnSuj0zZ3Y' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' allowfullscreen></iframe>",
     "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com",
     "icon": "eyelogo3.svg",
@@ -91,8 +91,8 @@
   },
   {
     "topic": "fluid-dynamics",
-    "title": "Fluid Dynamics Monitoring",
-    "description": "Full description for Fluid Dynamics Monitoring goes here.",
+    "title": "Gas Leakage Detection",
+    "description": "<strong>Acoustic & Environmental Sensing:</strong><br><br>• Developing a low-cost ultrasonic array for leak detection and localisation.<br>• Tested indoors and outdoors (up to 30m).<br>• Integrated with mobile platforms for site inspection.",
     "media": "<iframe width='100%' height='450' src='https://www.youtube.com/embed/UAnSuj0zZ3Y' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' allowfullscreen></iframe>",
     "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com",
     "icon": "eyelogo3.svg",
@@ -106,8 +106,8 @@
   },
   {
     "topic": "particle-size",
-    "title": "Particle Size Monitoring",
-    "description": "Full description for Particle Size Monitoring goes here.",
+    "title": "Welding Monitoring",
+    "description": "<strong>Quality Assurance:</strong><br><br>• Real-time monitoring of weld pools at high temporal and spatial resolution.<br>• Captures before, during, and after welding (unlike HDR cameras that only capture the weld arc).<br>• Enables closed-loop feedback to improve weld quality.",
     "media": "<iframe width='100%' height='450' src='https://www.youtube.com/embed/UAnSuj0zZ3Y' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' allowfullscreen></iframe>",
     "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com",
     "icon": "eyelogo3.svg",
@@ -122,7 +122,7 @@
   {
     "topic": "high-speed",
     "title": "High-Speed Counting",
-    "description": "Full description for High-Speed Counting goes here.",
+    "description": "This research achieves 100% accuracy in high-speed production lines. The system can count and inspect thousands of small items per minute, such as pills or bottle caps, ensuring precise inventory control and quality assurance without slowing down the line.",
     "media": "<iframe width='100%' height='450' src='https://www.youtube.com/embed/UAnSuj0zZ3Y' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' allowfullscreen></iframe>",
     "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com",
     "icon": "eyelogo3.svg",
@@ -136,8 +136,8 @@
   },
   {
     "topic": "vibration",
-    "title": "Vibration Measurement",
-    "description": "Full description for Vibration Measurement goes here.",
+    "title": "Drill Bit Monitoring",
+    "description": "<strong>Predictive Maintenance:</strong><br><br>• Detects shards, debris, vibration, and speed of rotation.<br>• Identifies pre-fatigue features before failure, saving time and cost.<br>• Uses online learning to adapt to different drill behaviours, spotting abnormal patterns without prior training.",
     "media": "<iframe width='100%' height='450' src='https://www.youtube.com/embed/UAnSuj0zZ3Y' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' allowfullscreen></iframe>",
     "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com",
     "icon": "earlogo2.svg",
