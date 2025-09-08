@@ -25,7 +25,7 @@
         .hotspot.predictive-maintenance::before { background: linear-gradient(to bottom, rgba(74, 85, 104, 0.7) 0%, rgba(74, 85, 104, 0) 100%); }
         .editor-panel { position: fixed; bottom: 20px; right: 20px; background-color: rgba(45, 55, 72, 0.9); color: white; padding: 1.5rem; border-radius: 1rem; box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 1000; width: 320px; backdrop-filter: blur(10px); max-height: calc(100vh - 40px); display: flex; flex-direction: column; }
         .editor-panel h3 { margin-top: 0; margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 0.5rem; }
-        .editor-controls-scroll { overflow-y: auto; margin-bottom: 1rem; }
+        .editor-controls-scroll { overflow-y: auto; margin-bottom: 1rem; padding-right: 10px; }
         .editor-control { margin-bottom: 1rem; }
         .editor-control label { display: block; margin-bottom: 0.5rem; font-weight: 500; font-size: 0.9rem; }
         .editor-control select, .editor-control input, .editor-control textarea { width: 100%; padding: 0.5rem; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background-color: rgba(0,0,0,0.2); color: white; box-sizing: border-box; }
@@ -68,6 +68,10 @@
                 <div class="editor-control">
                     <label for="hotspot-media-input">Media Embed Code</label>
                     <textarea id="hotspot-media-input" rows="3"></textarea>
+                </div>
+                 <div class="editor-control">
+                    <label for="hotspot-qrcode-input">QR Code Image URL</label>
+                    <input type="text" id="hotspot-qrcode-input">
                 </div>
                 <hr style="border-color: rgba(255,255,255,0.2); margin: 1rem 0;">
                 <div class="editor-control">
@@ -113,19 +117,17 @@
             const factoryContainer = document.getElementById('factory-view');
             const hotspotSelect = document.getElementById('hotspot-select');
             
-            // Content fields
             const titleInput = document.getElementById('hotspot-title-input');
             const descriptionInput = document.getElementById('hotspot-description-input');
             const mediaInput = document.getElementById('hotspot-media-input');
+            const qrCodeInput = document.getElementById('hotspot-qrcode-input');
 
-            // Style fields
             const textInput = document.getElementById('hotspot-text-input');
             const fontSelect = document.getElementById('hotspot-font-select');
             const iconSelect = document.getElementById('hotspot-icon-select');
             const angleSlider = document.getElementById('spotlight-angle-slider');
             const lengthSlider = document.getElementById('spotlight-length-slider');
             
-            // Buttons
             const saveButton = document.getElementById('save-config-button');
             const addButton = document.getElementById('add-hotspot-button');
             const deleteButton = document.getElementById('delete-hotspot-button');
@@ -150,7 +152,7 @@
                     
                     const option = document.createElement('option');
                     option.value = index;
-                    option.textContent = data.title; // Use title for the dropdown
+                    option.textContent = data.title;
                     hotspotSelect.appendChild(option);
                     
                     factoryContainer.appendChild(hotspot);
@@ -166,6 +168,7 @@
                 titleInput.value = data.title;
                 descriptionInput.value = data.description;
                 mediaInput.value = data.media;
+                qrCodeInput.value = data.qrCode;
                 textInput.value = data.text;
                 fontSelect.value = data.font;
                 iconSelect.value = data.icon;
@@ -235,30 +238,28 @@
                 const element = document.querySelector(`.hotspot[data-index='${index}']`);
                 if (!data || !element) return;
 
-                // Update data object from all fields
                 data.title = titleInput.value;
                 data.description = descriptionInput.value;
                 data.media = mediaInput.value;
+                data.qrCode = qrCodeInput.value;
                 data.text = textInput.value;
                 data.font = fontSelect.value;
                 data.icon = iconSelect.value;
                 data.angle = angleSlider.value;
                 data.length = lengthSlider.value;
 
-                // Update the hotspot element visually
                 element.style.fontFamily = data.font;
                 element.querySelector('.hotspot-icon').src = data.icon;
                 element.querySelector('.hotspot-text').innerHTML = data.text;
                 element.style.setProperty('--spotlight-angle', `${data.angle}deg`);
                 element.style.setProperty('--spotlight-length', `${data.length}px`);
 
-                // Update the dropdown text
                 hotspotSelect.options[parseInt(index) + 1].textContent = data.title;
             }
 
             hotspotSelect.addEventListener('change', () => selectHotspot(hotspotSelect.value));
             
-            [titleInput, descriptionInput, mediaInput, textInput, fontSelect, iconSelect, angleSlider, lengthSlider].forEach(input => {
+            [titleInput, descriptionInput, mediaInput, qrCodeInput, textInput, fontSelect, iconSelect, angleSlider, lengthSlider].forEach(input => {
                 input.addEventListener('input', () => {
                     if (selectedHotspotElement) {
                         applyChanges(selectedHotspotElement.dataset.index);
@@ -268,18 +269,15 @@
 
             addButton.addEventListener('click', () => {
                 const newHotspotData = {
-                    topic: "new-topic-" + Date.now(), // Ensure unique topic
+                    topic: "new-topic-" + Date.now(),
                     title: "New Hotspot",
                     description: "Full description goes here.",
-                    media: "<iframe>...</iframe>",
+                    media: "<iframe src='...' ></iframe>",
+                    qrCode: "https://api.qrserver.com/...",
                     text: "New<br>Hotspot",
-                    top: "50%",
-                    left: "50%",
-                    angle: 0,
-                    length: 120,
-                    category: "productivity",
-                    font: "Inter, sans-serif",
-                    icon: "eyelogo.png"
+                    top: "50%", left: "50%",
+                    angle: 0, length: 120, category: "productivity",
+                    font: "Inter, sans-serif", icon: "eyelogo.png"
                 };
                 hotspotData.push(newHotspotData);
                 createHotspots();
@@ -311,19 +309,30 @@
                 alert('Configuration saved to browser and downloaded as config.json!');
             });
 
-            // Initial Load
-            const savedConfig = localStorage.getItem('hotspotConfig');
-            if (savedConfig) {
-                hotspotData = JSON.parse(savedConfig);
-            } else {
-                // Default data with new content fields
-                hotspotData = [
-                    { topic: "agv", title: "AGV & SVG Tracking", description: "Boost your logistical efficiency...", media: "<iframe...>", text: "AGV & SVG<br>Tracking", top: "80%", left: "15%", angle: -45, length: 120, category: "productivity", icon: "eyelogo.png", font: "Inter, sans-serif" },
-                    { topic: "vibration", title: "Vibration Measurement", description: "Prevent downtime before it happens...", media: "<iframe...>", text: "Vibration<br>Measurement", top: "50%", left: "40%", angle: -135, length: 120, category: "predictive-maintenance", icon: "earlogo.png", font: "Inter, sans-serif" }
-                    // Add all other default hotspots here
-                ];
+            async function loadInitialConfig() {
+                const savedConfig = localStorage.getItem('hotspotConfig');
+                if (savedConfig) {
+                    hotspotData = JSON.parse(savedConfig);
+                } else {
+                    try {
+                        const response = await fetch('./config.json');
+                        if (response.ok) {
+                            hotspotData = await response.json();
+                        } else {
+                             throw new Error('config.json not found');
+                        }
+                    } catch(e) {
+                        console.warn("config.json not found or invalid. Loading hardcoded default data.");
+                        hotspotData = [
+                            { topic: "agv", title: "AGV & SVG Tracking", description: "Full description...", media: "<iframe...>", qrCode: "...", text: "AGV & SVG<br>Tracking", top: "80%", left: "15%", angle: -45, length: 120, category: "productivity", icon: "eyelogo.png", font: "Inter, sans-serif" },
+                            { topic: "vibration", title: "Vibration Measurement", description: "Full description...", media: "<iframe...>", qrCode: "...", text: "Vibration<br>Measurement", top: "50%", left: "40%", angle: -135, length: 120, category: "predictive-maintenance", icon: "earlogo.png", font: "Inter, sans-serif" }
+                        ];
+                    }
+                }
+                createHotspots();
             }
-            createHotspots();
+
+            loadInitialConfig();
         });
     </script>
 </body>
