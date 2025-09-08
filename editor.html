@@ -81,6 +81,8 @@
         #add-hotspot:hover { background-color: #2b6cb0; }
         #delete-hotspot { background-color: #e53e3e; color: white; }
         #delete-hotspot:hover { background-color: #c53030; }
+        #clear-config { background-color: #f6ad55; color: white; }
+        #clear-config:hover { background-color: #dd6b20; }
         #save-config { background-color: #38a169; color: white; width: 100%; }
         #save-config:hover { background-color: #2f855a; }
         #back-to-view { background-color: #f7fafc; border: 1px solid #e2e8f0; color: #2d3748; width: 100%; margin-top: 0.5rem; }
@@ -176,6 +178,7 @@
         <div class="button-group">
             <button id="add-hotspot">+ Add</button>
             <button id="delete-hotspot" style="display:none;">- Delete</button>
+            <button id="clear-config">Clear Saved Edits</button>
             <button id="save-config">💾 Save & Download</button>
             <a href="index.html" id="back-to-view">↩️ View Page</a>
         </div>
@@ -187,7 +190,6 @@
         const hotspotControls = document.getElementById('hotspot-controls');
         const noSelectionPanel = document.getElementById('no-selection');
         
-        // --- Input element references ---
         const hotspotSelect = document.getElementById('hotspot-select');
         const titleInput = document.getElementById('hotspot-title-input');
         const descriptionInput = document.getElementById('hotspot-description-input');
@@ -202,10 +204,10 @@
         const angleSlider = document.getElementById('spotlight-angle-slider');
         const lengthSlider = document.getElementById('spotlight-length-slider');
         
-        // --- Button references ---
         const addButton = document.getElementById('add-hotspot');
         const deleteButton = document.getElementById('delete-hotspot');
         const saveButton = document.getElementById('save-config');
+        const clearButton = document.getElementById('clear-config');
         
         let hotspotData = [];
         let selectedHotspot = null;
@@ -237,25 +239,26 @@
         function updateEditorPanel(index) {
             const data = hotspotData[index];
             if (!data) return;
-            titleInput.value = data.title;
-            descriptionInput.value = data.description;
-            mediaInput.value = data.media;
-            qrCodeInput.value = data.qrCode;
-            textInput.value = data.text;
-            categorySelect.value = data.category;
-            iconSelect.value = data.icon;
-            fontSelect.value = data.font;
-            topSlider.value = parseFloat(data.top);
-            leftSlider.value = parseFloat(data.left);
-            angleSlider.value = data.angle;
-            lengthSlider.value = data.length;
+            // Use `|| ''` to prevent "undefined" from appearing in fields
+            titleInput.value = data.title || '';
+            descriptionInput.value = data.description || '';
+            mediaInput.value = data.media || '';
+            qrCodeInput.value = data.qrCode || '';
+            textInput.value = data.text || '';
+            categorySelect.value = data.category || 'productivity';
+            iconSelect.value = data.icon || 'eyelogo.png';
+            fontSelect.value = data.font || 'Inter, sans-serif';
+            topSlider.value = parseFloat(data.top) || 50;
+            leftSlider.value = parseFloat(data.left) || 50;
+            angleSlider.value = data.angle || 0;
+            lengthSlider.value = data.length || 120;
         }
 
         function selectHotspot(index) {
             if (selectedHotspot) {
                 selectedHotspot.classList.remove('selected');
             }
-            if (index === null || index === "") {
+            if (index === null || index === "" || index === undefined) {
                 selectedHotspot = null;
                 hotspotControls.style.display = 'none';
                 deleteButton.style.display = 'none';
@@ -293,7 +296,6 @@
                         hotspot.style.left = `${xPercent.toFixed(2)}%`;
                         hotspot.style.top = `${yPercent.toFixed(2)}%`;
                         
-                        // Update sliders and data object in real-time
                         topSlider.value = yPercent;
                         leftSlider.value = xPercent;
                         const data = hotspotData[hotspot.dataset.index];
@@ -382,6 +384,13 @@
             alert('Configuration saved to browser and downloaded as config.json!');
         });
 
+        clearButton.addEventListener('click', () => {
+            if(confirm("Are you sure you want to clear your saved edits? This will reload the default configuration from config.json.")){
+                localStorage.removeItem('hotspotConfig');
+                location.reload();
+            }
+        });
+
         async function loadInitialConfig() {
             const savedConfig = localStorage.getItem('hotspotConfig');
             if (savedConfig) {
@@ -396,15 +405,15 @@
                     console.warn("config.json not found. Loading hardcoded default data.");
                     hotspotData = [
                         { "topic": "agv", "title": "AGV & SVG Tracking", "description": "Full description for AGV & SVG Tracking goes here...", "media": "<iframe width='100%' height='450' src='https://www.youtube.com/embed/UAnSuj0zZ3Y' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' allowfullscreen></iframe>", "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://www.prophesee.ai/event-based-vision/", "text": "AGV & SVG<br>Tracking", "top": "80%", "left": "15%", "angle": -45, "length": 120, "category": "productivity", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
-                        { "topic": "pick-place", "title": "Pick & Place", "description": "Full description for Pick & Place...", "media": "<iframe ...></iframe>", "qrCode": "...", "text": "Pick & Place", "top": "75%", "left": "25%", "angle": -45, "length": 120, "category": "productivity", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
-                        { "topic": "conveyor", "title": "Conveyor Speed Measurement", "description": "Full description...", "media": "<iframe ...></iframe>", "qrCode": "...", "text": "Conveyor Speed<br>Measurement", "top": "65%", "left": "50%", "angle": 135, "length": 120, "category": "productivity", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
-                        { "topic": "barcode", "title": "Barcode Localization", "description": "Full description...", "media": "<iframe ...></iframe>", "qrCode": "...", "text": "Barcode<br>Localization", "top": "60%", "left": "65%", "angle": 135, "length": 120, "category": "productivity", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
-                        { "topic": "area-monitoring", "title": "Area Monitoring", "description": "Full description...", "media": "<iframe ...></iframe>", "qrCode": "...", "text": "Area<br>Monitoring", "top": "40%", "left": "30%", "angle": -45, "length": 120, "category": "safety", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
-                        { "topic": "spatter", "title": "Spatter Monitoring", "description": "Full description...", "media": "<iframe ...></iframe>", "qrCode": "...", "text": "Spatter<br>Monitoring", "top": "70%", "left": "45%", "angle": 180, "length": 120, "category": "safety", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
-                        { "topic": "fluid-dynamics", "title": "Fluid Dynamics Monitoring", "description": "Full description...", "media": "<iframe ...></iframe>", "qrCode": "...", "text": "Fluid Dynamics<br>Monitoring", "top": "25%", "left": "85%", "angle": 45, "length": 120, "category": "safety", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
-                        { "topic": "particle-size", "title": "Particle Size Monitoring", "description": "Full description...", "media": "<iframe ...></iframe>", "qrCode": "...", "text": "Particle Size<br>Monitoring", "top": "40%", "left": "70%", "angle": 45, "length": 120, "category": "quality", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
-                        { "topic": "high-speed", "title": "High-Speed Counting", "description": "Full description...", "media": "<iframe ...></iframe>", "qrCode": "...", "text": "High-Speed<br>Counting", "top": "55%", "left": "80%", "angle": 90, "length": 120, "category": "quality", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
-                        { "topic": "vibration", "title": "Vibration Measurement", "description": "Full description...", "media": "<iframe ...></iframe>", "qrCode": "...", "text": "Vibration<br>Measurement", "top": "50%", "left": "40%", "angle": -135, "length": 120, "category": "predictive-maintenance", "icon": "earlogo.png", "font": "Inter, sans-serif" }
+                        { "topic": "pick-place", "title": "Pick & Place", "description": "Full description for Pick & Place...", "media": "<iframe src='https://www.youtube.com/embed/UAnSuj0zZ3Y'></iframe>", "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com", "text": "Pick & Place", "top": "75%", "left": "25%", "angle": -45, "length": 120, "category": "productivity", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
+                        { "topic": "conveyor", "title": "Conveyor Speed Measurement", "description": "Full description...", "media": "<iframe src='https://www.youtube.com/embed/UAnSuj0zZ3Y'></iframe>", "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com", "text": "Conveyor Speed<br>Measurement", "top": "65%", "left": "50%", "angle": 135, "length": 120, "category": "productivity", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
+                        { "topic": "barcode", "title": "Barcode Localization", "description": "Full description...", "media": "<iframe src='https://www.youtube.com/embed/UAnSuj0zZ3Y'></iframe>", "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com", "text": "Barcode<br>Localization", "top": "60%", "left": "65%", "angle": 135, "length": 120, "category": "productivity", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
+                        { "topic": "area-monitoring", "title": "Area Monitoring", "description": "Full description...", "media": "<iframe src='https://www.youtube.com/embed/UAnSuj0zZ3Y'></iframe>", "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com", "text": "Area<br>Monitoring", "top": "40%", "left": "30%", "angle": -45, "length": 120, "category": "safety", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
+                        { "topic": "spatter", "title": "Spatter Monitoring", "description": "Full description...", "media": "<iframe src='https://www.youtube.com/embed/UAnSuj0zZ3Y'></iframe>", "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com", "text": "Spatter<br>Monitoring", "top": "70%", "left": "45%", "angle": 180, "length": 120, "category": "safety", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
+                        { "topic": "fluid-dynamics", "title": "Fluid Dynamics Monitoring", "description": "Full description...", "media": "<iframe src='https://www.youtube.com/embed/UAnSuj0zZ3Y'></iframe>", "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com", "text": "Fluid Dynamics<br>Monitoring", "top": "25%", "left": "85%", "angle": 45, "length": 120, "category": "safety", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
+                        { "topic": "particle-size", "title": "Particle Size Monitoring", "description": "Full description...", "media": "<iframe src='https://www.youtube.com/embed/UAnSuj0zZ3Y'></iframe>", "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com", "text": "Particle Size<br>Monitoring", "top": "40%", "left": "70%", "angle": 45, "length": 120, "category": "quality", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
+                        { "topic": "high-speed", "title": "High-Speed Counting", "description": "Full description...", "media": "<iframe src='https://www.youtube.com/embed/UAnSuj0zZ3Y'></iframe>", "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com", "text": "High-Speed<br>Counting", "top": "55%", "left": "80%", "angle": 90, "length": 120, "category": "quality", "icon": "eyelogo.png", "font": "Inter, sans-serif" },
+                        { "topic": "vibration", "title": "Vibration Measurement", "description": "Full description...", "media": "<iframe src='https://www.youtube.com/embed/UAnSuj0zZ3Y'></iframe>", "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com", "text": "Vibration<br>Measurement", "top": "50%", "left": "40%", "angle": -135, "length": 120, "category": "predictive-maintenance", "icon": "earlogo.png", "font": "Inter, sans-serif" }
                     ];
                 }
             }
