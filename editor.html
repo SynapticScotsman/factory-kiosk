@@ -58,17 +58,47 @@
         }
         
         /* --- Hotspot Styles --- */
-        .hotspot { position: absolute; width: 90px; height: 90px; border-radius: 50%; cursor: move; transform: translate(-50%, -50%); display: flex; flex-direction: column; justify-content: flex-end; align-items: center; text-align: center; color: white; font-weight: 600; line-height: 1.2; text-transform: uppercase; border: 2px solid rgba(255, 255, 255, 0.7); box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: transform 0.1s, box-shadow 0.1s; padding-bottom: 20px; box-sizing: border-box; user-select: none; }
+        .hotspot { 
+            position: absolute; 
+            width: 90px;
+            height: 90px;
+            border-radius: 50%; 
+            cursor: move; 
+            transform: translate(-50%, -50%); 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: flex-end; 
+            align-items: center; 
+            text-align: center; 
+            color: white; 
+            font-weight: 600; 
+            line-height: 1.2; 
+            text-transform: uppercase; 
+            border: 2px solid rgba(255, 255, 255, 0.7); 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2); 
+            transition: transform 0.1s, box-shadow 0.1s; 
+            padding-bottom: 20px;
+            box-sizing: border-box; 
+            user-select: none; 
+        }
         .hotspot.selected { box-shadow: 0 0 0 4px #4299e1, 0 4px 15px rgba(0,0,0,0.2); z-index: 100; }
         .hotspot:hover { transform: translate(-50%, -50%) scale(1.05); }
-        .hotspot-icon { position: absolute; width: 60px; height: 60px; top: -30px; left: 50%; transform: translateX(-50%); filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3)); pointer-events: none; }
+        .hotspot-icon { 
+            position: absolute; 
+            width: 60px;
+            height: 60px;
+            top: -30px;
+            left: 50%; 
+            transform: translateX(-50%); 
+            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3)); 
+            pointer-events: none; 
+        }
         .hotspot-text { font-size: 0.7rem; }
         .hotspot.productivity { --spotlight-color: rgba(74, 144, 226, 0.7); background-color: #4A90E2; }
         .hotspot.safety { --spotlight-color: rgba(245, 101, 101, 0.7); background-color: #f56565; }
         .hotspot.quality { --spotlight-color: rgba(237, 100, 166, 0.7); background-color: #ed64a6; }
         .hotspot.predictive-maintenance { --spotlight-color: rgba(74, 85, 104, 0.7); background-color: #4a5568; }
 
-        /* New Spotlight Beam Style */
         .spotlight-beam {
             content: ''; 
             position: absolute; 
@@ -83,7 +113,7 @@
             clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
             background: linear-gradient(to bottom, var(--spotlight-color) 0%, transparent 100%);
         }
-
+        
         /* --- Control Panel Styles --- */
         #control-panel h2 { margin-top: 0; font-size: 1.5rem; color: #2d3748; border-bottom: 1px solid #e2e8f0; padding-bottom: 1rem; margin-bottom: 1.5rem; }
         .editor-controls-scroll { overflow-y: auto; height: 100%; padding-right: 1rem; }
@@ -106,7 +136,6 @@
         #back-to-view:hover { background-color: #e2e8f0; }
         #no-selection { text-align: center; color: #718096; margin-top: 2rem; }
 
-        /* Styles for individual spotlight editor */
         .spotlight-editor-item {
             border: 1px solid #e2e8f0;
             border-radius: 8px;
@@ -256,8 +285,7 @@
                 hotspotEl.style.fontFamily = data.font;
                 hotspotEl.innerHTML = `<img src="${data.icon}" class="hotspot-icon"><div class="hotspot-text">${data.text}</div>`;
                 
-                // Render spotlight beams
-                if (data.spotlights) {
+                if (data.spotlights && Array.isArray(data.spotlights)) {
                     data.spotlights.forEach(spot => {
                         const beam = document.createElement('div');
                         beam.className = 'spotlight-beam';
@@ -302,25 +330,22 @@
                 spotlightEditorList.appendChild(item);
             });
 
-            // Add event listeners for the new controls
             spotlightEditorList.querySelectorAll('.remove-spotlight-btn').forEach(btn => {
                 btn.onclick = () => {
                     const spotIndex = btn.dataset.spotIndex;
                     data.spotlights.splice(spotIndex, 1);
-                    renderHotspots();
-                    renderSpotlightEditor(hotspotIndex);
+                    applyChangesFromPanel(hotspotIndex);
                 };
             });
-            spotlightEditorList.querySelectorAll('.spotlight-angle-slider').forEach((slider, spotIndex) => {
-                slider.oninput = () => {
-                    data.spotlights[spotIndex].angle = slider.value;
-                    renderHotspots(); // Re-render to show visual change
-                };
-            });
-            spotlightEditorList.querySelectorAll('.spotlight-length-slider').forEach((slider, spotIndex) => {
-                slider.oninput = () => {
-                    data.spotlights[spotIndex].length = slider.value;
-                    renderHotspots(); // Re-render to show visual change
+            spotlightEditorList.querySelectorAll('input').forEach((slider, inputIndex) => {
+                 slider.oninput = () => {
+                    const spotIndex = Math.floor(inputIndex / 2); // 2 inputs per spotlight
+                    if (slider.classList.contains('spotlight-angle-slider')) {
+                        data.spotlights[spotIndex].angle = slider.value;
+                    } else {
+                        data.spotlights[spotIndex].length = slider.value;
+                    }
+                    applyChangesFromPanel(hotspotIndex);
                 };
             });
         }
@@ -405,12 +430,13 @@
             data.icon = iconSelect.value;
             data.font = fontSelect.value;
             
-            element.className = `hotspot selected ${data.category}`;
-            element.style.fontFamily = data.font;
-            element.querySelector('.hotspot-icon').src = data.icon;
-            element.querySelector('.hotspot-text').innerHTML = data.text;
-            
-            renderHotspots(); // Full re-render to update spotlights
+            renderHotspots(); // Full re-render to ensure everything is in sync
+            const reselected = document.querySelector(`.hotspot[data-index='${index}']`);
+            if(reselected) {
+                selectedHotspot = reselected;
+                selectedHotspot.classList.add('selected');
+                hotspotSelect.value = index;
+            }
             hotspotSelect.options[parseInt(index) + 1].textContent = data.title;
         }
 
@@ -423,7 +449,7 @@
                 }
             });
         });
-
+        
         addSpotlightButton.addEventListener('click', () => {
             if(selectedHotspot){
                 const index = selectedHotspot.dataset.index;
@@ -433,7 +459,7 @@
                 } else {
                     data.spotlights = [{ angle: 0, length: 120 }];
                 }
-                renderHotspots();
+                applyChangesFromPanel(index);
                 renderSpotlightEditor(index);
             }
         });
@@ -480,26 +506,24 @@
 
         async function loadInitialConfig() {
             const savedConfig = localStorage.getItem('hotspotConfig');
-            let initialData = [];
             if (savedConfig) {
-                try { initialData = JSON.parse(savedConfig); } catch (e) { console.error("Bad data in localStorage", e); }
+                try { hotspotData = JSON.parse(savedConfig); } catch (e) { localStorage.removeItem('hotspotConfig'); }
             } 
             
-            if (initialData.length === 0) {
+            if (hotspotData.length === 0) {
                 try {
                     const response = await fetch('./config.json');
                     if (response.ok) {
-                        initialData = await response.json();
+                        hotspotData = await response.json();
                     } else { throw new Error('config.json not found'); }
                 } catch(e) {
                     console.warn("config.json not found. Loading hardcoded default data.");
-                    initialData = [
+                    hotspotData = [
                         { "topic": "agv", "title": "AGV & SVG Tracking", "description": "Full description...", "media": "<iframe...>", "qrCode": "...", "text": "AGV & SVG<br>Tracking", "top": "80%", "left": "15%", "category": "productivity", "icon": "eyelogo.png", "font": "Inter, sans-serif", "spotlights": [{"angle": -45, "length": 120}] },
                         { "topic": "vibration", "title": "Vibration Measurement", "description": "Full description...", "media": "<iframe...>", "qrCode": "...", "text": "Vibration<br>Measurement", "top": "50%", "left": "40%", "category": "predictive-maintenance", "icon": "earlogo.png", "font": "Inter, sans-serif", "spotlights": [{"angle": -135, "length": 120}]}
                     ];
                 }
             }
-            hotspotData = initialData;
             renderHotspots();
         }
 
