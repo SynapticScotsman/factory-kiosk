@@ -46,7 +46,6 @@
             border-radius: 1rem;
         }
 
-        /* Using stable fixed-pixel sizes with media queries for responsiveness */
         .hotspot { 
             position: absolute; 
             width: 90px; 
@@ -266,7 +265,7 @@
             if (!data) return; 
             modalTitle.textContent = data.title; 
             modalDescription.innerHTML = data.description;
-            learnMoreButton.textContent = 'Learn More →'; 
+            learnMoreButton.textContent = 'View Demos'; 
             learnMoreButton.dataset.topic = topic; 
             modal.classList.add('active'); 
             overlay.classList.add('active'); 
