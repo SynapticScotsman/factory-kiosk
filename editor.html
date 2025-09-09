@@ -16,17 +16,53 @@
             height: 100vh; 
             overflow: hidden; 
         }
-        #editor-container { flex-grow: 1; display: flex; justify-content: center; align-items: center; padding: 2rem; overflow: auto; }
-        #control-panel { width: 350px; flex-shrink: 0; background-color: #fff; padding: 1.5rem; box-shadow: -5px 0 20px rgba(0,0,0,0.05); display: flex; flex-direction: column; }
-        .image-frame { background-color: #fff; padding: 2rem; border-radius: 1rem; box-shadow: 0 10px 30px rgba(0,0,0,0.1); flex-shrink: 0; }
-        .factory-container { position: relative; max-width: 1200px; width: 100%; }
-        .factory-image { display: block; width: 100%; height: auto; border-radius: 1rem; }
+
+        /* --- Main Layout --- */
+        #editor-container {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            overflow: auto;
+        }
+
+        #control-panel {
+            width: 350px;
+            flex-shrink: 0;
+            background-color: #fff;
+            padding: 1.5rem;
+            box-shadow: -5px 0 20px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+        }
         
-        /* --- Hotspot Styles (Reverted to stable fixed units) --- */
+        .image-frame {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+        }
+        
+        .factory-container { 
+            position: relative; 
+            max-width: 1200px; 
+            width: 100%; 
+        }
+        
+        .factory-image {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 1rem;
+        }
+        
+        /* --- Hotspot Styles (Synced with index.html) --- */
         .hotspot { 
             position: absolute; 
-            width: 90px;
-            height: 90px;
+            width: 90px; 
+            height: 90px; 
             border-radius: 50%; 
             cursor: move; 
             transform: translate(-50%, -50%); 
@@ -42,7 +78,7 @@
             border: 2px solid rgba(255, 255, 255, 0.7); 
             box-shadow: 0 4px 15px rgba(0,0,0,0.2); 
             transition: transform 0.1s, box-shadow 0.1s; 
-            padding-bottom: 20px;
+            padding-bottom: 20px; 
             box-sizing: border-box; 
             user-select: none; 
         }
@@ -50,9 +86,9 @@
         .hotspot:hover { transform: translate(-50%, -50%) scale(1.05); }
         .hotspot-icon { 
             position: absolute; 
-            width: 60px;
-            height: 60px;
-            top: -30px;
+            width: 60px; 
+            height: 60px; 
+            top: -30px; 
             left: 50%; 
             transform: translateX(-50%); 
             filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3)); 
@@ -79,6 +115,7 @@
             background: linear-gradient(to bottom, var(--spotlight-color) 0%, transparent 100%);
         }
         
+        /* --- Control Panel Styles --- */
         #control-panel h2 { margin-top: 0; font-size: 1.5rem; color: #2d3748; border-bottom: 1px solid #e2e8f0; padding-bottom: 1rem; margin-bottom: 1.5rem; }
         .editor-controls-scroll { overflow-y: auto; height: 100%; padding-right: 1rem; }
         .control-group { margin-bottom: 1.25rem; }
@@ -97,13 +134,16 @@
     </style>
 </head>
 <body>
+
     <div id="editor-container">
         <div class="image-frame">
             <div class="factory-container" id="factory-container">
                  <img src="Artboard 1@4x.png" alt="Industrial Factory Layout" class="factory-image" onerror="this.onerror=null;this.src='https://placehold.co/1400x788/cccccc/ffffff?text=Factory+Image+Not+Found';">
+                <!-- Draggable hotspots will be generated here -->
             </div>
         </div>
     </div>
+
     <aside id="control-panel">
         <h2>Hotspot Editor</h2>
         <div class="editor-controls-scroll">
@@ -217,9 +257,17 @@
         
         let hotspotData = [];
         let selectedHotspot = null;
-
+        
         const defaultHotspotData = [
-            { "topic": "agv", "title": "AGV & SVG Tracking", "description": "Full description...", "media": "<iframe...>", "qrCode": "...", "text": "AGV & SVG<br>Tracking", "top": "80%", "left": "15%", "angle": -45, "length": 120, "category": "productivity", "icon": "eyelogo3.svg", "font": "Inter, sans-serif" },
+            { "topic": "agv", "title": "AGV & SVG Tracking", "description": "Full description for AGV & SVG Tracking goes here...", "media": "<iframe...>", "qrCode": "...", "text": "AGV & SVG<br>Tracking", "top": "80%", "left": "15%", "angle": -45, "length": 120, "category": "productivity", "icon": "eyelogo3.svg", "font": "Inter, sans-serif" },
+            { "topic": "pick-place", "title": "Pick & Place", "description": "Full description for Pick & Place...", "media": "<iframe...>", "qrCode": "...", "text": "Pick & Place", "top": "75%", "left": "25%", "angle": -45, "length": 120, "category": "productivity", "icon": "eyelogo3.svg", "font": "Inter, sans-serif" },
+            { "topic": "conveyor", "title": "Conveyor Speed Measurement", "description": "Full description...", "media": "<iframe...>", "qrCode": "...", "text": "Conveyor Speed<br>Measurement", "top": "65%", "left": "50%", "angle": 135, "length": 120, "category": "productivity", "icon": "eyelogo3.svg", "font": "Inter, sans-serif" },
+            { "topic": "barcode", "title": "Barcode Localization", "description": "Full description...", "media": "<iframe...>", "qrCode": "...", "text": "Barcode<br>Localization", "top": "60%", "left": "65%", "angle": 135, "length": 120, "category": "productivity", "icon": "eyelogo3.svg", "font": "Inter, sans-serif" },
+            { "topic": "area-monitoring", "title": "Area Monitoring", "description": "Full description...", "media": "<iframe...>", "qrCode": "...", "text": "Area<br>Monitoring", "top": "40%", "left": "30%", "angle": -45, "length": 120, "category": "safety", "icon": "eyelogo3.svg", "font": "Inter, sans-serif" },
+            { "topic": "spatter", "title": "Spatter Monitoring", "description": "Full description...", "media": "<iframe...>", "qrCode": "...", "text": "Spatter<br>Monitoring", "top": "70%", "left": "45%", "angle": 180, "length": 120, "category": "safety", "icon": "eyelogo3.svg", "font": "Inter, sans-serif" },
+            { "topic": "fluid-dynamics", "title": "Fluid Dynamics Monitoring", "description": "Full description...", "media": "<iframe...>", "qrCode": "...", "text": "Fluid Dynamics<br>Monitoring", "top": "25%", "left": "85%", "angle": 45, "length": 120, "category": "safety", "icon": "eyelogo3.svg", "font": "Inter, sans-serif" },
+            { "topic": "particle-size", "title": "Particle Size Monitoring", "description": "Full description...", "media": "<iframe...>", "qrCode": "...", "text": "Particle Size<br>Monitoring", "top": "40%", "left": "70%", "angle": 45, "length": 120, "category": "quality", "icon": "eyelogo3.svg", "font": "Inter, sans-serif" },
+            { "topic": "high-speed", "title": "High-Speed Counting", "description": "Full description...", "media": "<iframe...>", "qrCode": "...", "text": "High-Speed<br>Counting", "top": "55%", "left": "80%", "angle": 90, "length": 120, "category": "quality", "icon": "eyelogo3.svg", "font": "Inter, sans-serif" },
             { "topic": "vibration", "title": "Vibration Measurement", "description": "Full description...", "media": "<iframe...>", "qrCode": "...", "text": "Vibration<br>Measurement", "top": "50%", "left": "40%", "angle": -135, "length": 120, "category": "predictive-maintenance", "icon": "earlogo2.svg", "font": "Inter, sans-serif" }
         ];
 
