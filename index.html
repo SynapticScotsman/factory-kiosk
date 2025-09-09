@@ -46,11 +46,11 @@
             border-radius: 1rem;
         }
 
+        /* Using stable fixed-pixel sizes with media queries for responsiveness */
         .hotspot { 
             position: absolute; 
-            width: 6.5%; /* Use percentage of parent for scaling */
-            height: auto;
-            aspect-ratio: 1 / 1; /* Ensures a perfect circle */
+            width: 90px; 
+            height: 90px; 
             border-radius: 50%; 
             cursor: pointer; 
             transform: translate(-50%, -50%); 
@@ -66,25 +66,21 @@
             border: 2px solid rgba(255, 255, 255, 0.7); 
             box-shadow: 0 4px 15px rgba(0,0,0,0.2); 
             transition: transform 0.3s ease; 
-            padding-bottom: 20%; 
+            padding-bottom: 20px; 
             box-sizing: border-box; 
         }
         .hotspot:hover { transform: translate(-50%, -50%) scale(1.05); }
-        
         .hotspot-icon { 
             position: absolute; 
-            width: 65%;
-            height: 65%;
-            top: -33%;
+            width: 60px; 
+            height: 60px; 
+            top: -30px; 
             left: 50%; 
             transform: translateX(-50%); 
             filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3)); 
             pointer-events: none; 
         }
-        .hotspot-text { 
-            font-size: clamp(0.4rem, 1vw, 0.7rem); /* Fluid typography */
-        }
-
+        .hotspot-text { font-size: 0.7rem; }
         .hotspot.productivity { --spotlight-color: rgba(74, 144, 226, 0.7); background-color: #4A90E2; }
         .hotspot.safety { --spotlight-color: rgba(245, 101, 101, 0.7); background-color: #f56565; }
         .hotspot.quality { --spotlight-color: rgba(237, 100, 166, 0.7); background-color: #ed64a6; }
@@ -126,6 +122,41 @@
         .media-container iframe, .media-container img { max-width: 100%; border-radius: 8px; }
         @keyframes fadeIn-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .content-fade-in { animation: fadeIn-up 0.6s ease-out forwards; }
+
+        @media (max-width: 768px) {
+            .hotspot {
+                width: 70px;
+                height: 70px;
+                padding-bottom: 12px;
+            }
+            .hotspot-icon {
+                width: 45px;
+                height: 45px;
+                top: -22px;
+            }
+            .hotspot-text {
+                font-size: 0.55rem;
+            }
+            .image-frame {
+                padding: 1rem;
+            }
+        }
+        @media (max-width: 480px) {
+             .hotspot {
+                width: 50px;
+                height: 50px;
+                padding-bottom: 8px;
+            }
+            .hotspot-icon {
+                width: 30px;
+                height: 30px;
+                top: -15px;
+            }
+            .hotspot-text {
+                font-size: 0.4rem;
+                line-height: 1.1;
+            }
+        }
     </style>
 </head>
 <body>
