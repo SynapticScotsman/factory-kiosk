@@ -16,51 +16,13 @@
             height: 100vh; 
             overflow: hidden; 
         }
-
-        /* --- Main Layout --- */
-        #editor-container {
-            flex-grow: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 2rem;
-            overflow: auto;
-        }
-
-        #control-panel {
-            width: 350px;
-            flex-shrink: 0;
-            background-color: #fff;
-            padding: 1.5rem;
-            box-shadow: -5px 0 20px rgba(0,0,0,0.05);
-            display: flex;
-            flex-direction: column;
-        }
+        #editor-container { flex-grow: 1; display: flex; justify-content: center; align-items: center; padding: 2rem; overflow: auto; }
+        #control-panel { width: 350px; flex-shrink: 0; background-color: #fff; padding: 1.5rem; box-shadow: -5px 0 20px rgba(0,0,0,0.05); display: flex; flex-direction: column; }
+        .image-frame { background-color: #fff; padding: 2rem; border-radius: 1rem; box-shadow: 0 10px 30px rgba(0,0,0,0.1); flex-shrink: 0; }
+        .factory-container { position: relative; max-width: 1200px; width: 100%; }
+        .factory-image { display: block; width: 100%; height: auto; border-radius: 1rem; }
         
-        /* New Frame Element */
-        .image-frame {
-            background-color: #fff;
-            padding: 2rem; /* This creates the white frame */
-            border-radius: 1rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            flex-shrink: 0;
-        }
-        
-        /* --- Factory View --- */
-        .factory-container { 
-            position: relative; 
-            max-width: 1200px; 
-            width: 100%; 
-        }
-        
-        .factory-image {
-            display: block;
-            width: 100%;
-            height: auto;
-            border-radius: 1rem;
-        }
-        
-        /* --- Hotspot Styles --- */
+        /* --- Hotspot Styles (Reverted to stable fixed units) --- */
         .hotspot { 
             position: absolute; 
             width: 90px;
@@ -88,9 +50,9 @@
         .hotspot:hover { transform: translate(-50%, -50%) scale(1.05); }
         .hotspot-icon { 
             position: absolute; 
-            width: 65%;
-            height: 65%;
-            top: -33%;
+            width: 60px;
+            height: 60px;
+            top: -30px;
             left: 50%; 
             transform: translateX(-50%); 
             filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3)); 
@@ -117,7 +79,6 @@
             background: linear-gradient(to bottom, var(--spotlight-color) 0%, transparent 100%);
         }
         
-        /* --- Control Panel Styles --- */
         #control-panel h2 { margin-top: 0; font-size: 1.5rem; color: #2d3748; border-bottom: 1px solid #e2e8f0; padding-bottom: 1rem; margin-bottom: 1.5rem; }
         .editor-controls-scroll { overflow-y: auto; height: 100%; padding-right: 1rem; }
         .control-group { margin-bottom: 1.25rem; }
@@ -128,29 +89,21 @@
         .button-group { margin-top: auto; padding-top: 1.5rem; border-top: 1px solid #e2e8f0; display: flex; flex-wrap: wrap; gap: 0.5rem; }
         .button-group button, .button-group a { display: block; flex-grow: 1; padding: 0.75rem; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; text-align: center; text-decoration: none; box-sizing: border-box; transition: background-color 0.2s; }
         #add-hotspot { background-color: #3182ce; color: white; }
-        #add-hotspot:hover { background-color: #2b6cb0; }
         #delete-hotspot { background-color: #e53e3e; color: white; }
-        #delete-hotspot:hover { background-color: #c53030; }
         #clear-config { background-color: #f6ad55; color: white; }
-        #clear-config:hover { background-color: #dd6b20; }
         #save-config { background-color: #38a169; color: white; width: 100%; }
-        #save-config:hover { background-color: #2f855a; }
         #back-to-view { background-color: #f7fafc; border: 1px solid #e2e8f0; color: #2d3748; width: 100%; margin-top: 0.5rem; }
-        #back-to-view:hover { background-color: #e2e8f0; }
         #no-selection { text-align: center; color: #718096; margin-top: 2rem; }
     </style>
 </head>
 <body>
-
     <div id="editor-container">
         <div class="image-frame">
             <div class="factory-container" id="factory-container">
                  <img src="Artboard 1@4x.png" alt="Industrial Factory Layout" class="factory-image" onerror="this.onerror=null;this.src='https://placehold.co/1400x788/cccccc/ffffff?text=Factory+Image+Not+Found';">
-                <!-- Draggable hotspots will be generated here -->
             </div>
         </div>
     </div>
-
     <aside id="control-panel">
         <h2>Hotspot Editor</h2>
         <div class="editor-controls-scroll">
@@ -159,7 +112,7 @@
                     <label for="hotspot-select">Selected Hotspot</label>
                     <select id="hotspot-select"></select>
                 </div>
-                <hr style="border-color: #e2e8f0; margin: 1rem 0;">
+                <hr>
                 <div class="control-group">
                     <label for="hotspot-title-input">Content Title</label>
                     <input type="text" id="hotspot-title-input">
@@ -176,7 +129,7 @@
                     <label for="hotspot-qrcode-input">QR Code Image URL</label>
                     <input type="text" id="hotspot-qrcode-input">
                 </div>
-                <hr style="border-color: #e2e8f0; margin: 1rem 0;">
+                <hr>
                 <div class="control-group">
                     <label for="hotspot-text-input">Hotspot Label (use &lt;br&gt;)</label>
                     <input type="text" id="hotspot-text-input">
@@ -201,10 +154,10 @@
                 <div class="control-group">
                     <label for="hotspot-font-select">Font</label>
                     <select id="hotspot-font-select">
-                        <option value="Inter, sans-serif" style="font-family: 'Inter', sans-serif;">Inter</option>
-                        <option value="Roboto, sans-serif" style="font-family: 'Roboto', sans-serif;">Roboto</option>
-                        <option value="Montserrat, sans-serif" style="font-family: 'Montserrat', sans-serif;">Montserrat</option>
-                        <option value="Poppins, sans-serif" style="font-family: 'Poppins', sans-serif;">Poppins</option>
+                        <option value="Inter, sans-serif">Inter</option>
+                        <option value="Roboto, sans-serif">Roboto</option>
+                        <option value="Montserrat, sans-serif">Montserrat</option>
+                        <option value="Poppins, sans-serif">Poppins</option>
                     </select>
                 </div>
                  <div class="control-group">
@@ -228,7 +181,6 @@
                 <p>Click a hotspot to edit it, or add a new one.</p>
             </div>
         </div>
-
         <div class="button-group">
             <button id="add-hotspot">+ Add</button>
             <button id="delete-hotspot" style="display:none;">- Delete</button>
@@ -265,6 +217,11 @@
         
         let hotspotData = [];
         let selectedHotspot = null;
+
+        const defaultHotspotData = [
+            { "topic": "agv", "title": "AGV & SVG Tracking", "description": "Full description...", "media": "<iframe...>", "qrCode": "...", "text": "AGV & SVG<br>Tracking", "top": "80%", "left": "15%", "angle": -45, "length": 120, "category": "productivity", "icon": "eyelogo3.svg", "font": "Inter, sans-serif" },
+            { "topic": "vibration", "title": "Vibration Measurement", "description": "Full description...", "media": "<iframe...>", "qrCode": "...", "text": "Vibration<br>Measurement", "top": "50%", "left": "40%", "angle": -135, "length": 120, "category": "predictive-maintenance", "icon": "earlogo2.svg", "font": "Inter, sans-serif" }
+        ];
 
         function renderHotspots() {
             factoryContainer.querySelectorAll('.hotspot').forEach(el => el.remove());
@@ -446,41 +403,29 @@
 
         async function loadInitialConfig(forceDefault = false) {
             let loaded = false;
-            
             if (!forceDefault) {
-                try {
-                    const response = await fetch('./config.json');
-                    if (response.ok) {
-                        hotspotData = await response.json();
-                        loaded = true;
-                        console.log("Loaded from config.json");
-                    } else { throw new Error('config.json not found'); }
-                } catch(e) {
-                    console.warn(e.message);
-                }
-            }
-            
-            if (!loaded) {
                 const savedConfig = localStorage.getItem('hotspotConfig');
                 if (savedConfig) {
                     try { 
                         hotspotData = JSON.parse(savedConfig); 
-                        if (hotspotData.length > 0) {
-                            loaded = true;
-                            console.log("Loaded from local storage");
-                        }
+                        if (hotspotData.length > 0) loaded = true;
                     } catch (e) { 
                         localStorage.removeItem('hotspotConfig');
                     }
                 }
             }
-
+            
             if (!loaded) {
-                console.warn("No valid config found, loading hardcoded default data.");
-                hotspotData = [
-                    { "topic": "agv", "title": "AGV & SVG Tracking", "description": "Full description...", "media": "<iframe...>", "qrCode": "...", "text": "AGV & SVG<br>Tracking", "top": "80%", "left": "15%", "angle": -45, "length": 120, "category": "productivity", "icon": "eyelogo3.svg", "font": "Inter, sans-serif" },
-                    { "topic": "vibration", "title": "Vibration Measurement", "description": "Full description...", "media": "<iframe...>", "qrCode": "...", "text": "Vibration<br>Measurement", "top": "50%", "left": "40%", "angle": -135, "length": 120, "category": "predictive-maintenance", "icon": "earlogo2.svg", "font": "Inter, sans-serif" }
-                ];
+                try {
+                    const response = await fetch('./config.json');
+                    if (response.ok) {
+                        hotspotData = await response.json();
+                        loaded = true;
+                    } else { throw new Error('config.json not found'); }
+                } catch(e) {
+                    console.warn(e.message, "Loading hardcoded default data.");
+                    hotspotData = defaultHotspotData;
+                }
             }
             renderHotspots();
         }
