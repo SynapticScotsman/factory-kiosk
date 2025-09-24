@@ -32,7 +32,7 @@
   {
     "topic": "conveyor",
     "title": "Conveyor Speed Measurement",
-    "description": "Tracking the flow of items on a conveyor in real-time allows for dynamic speed adjustments. This ensures perfect synchronization between different manufacturing stages, preventing bottlenecks and optimizing throughput for maximum productivity.",
+    "description": "Tracking the flow of items on a conveyor in real-time allows for dynamic speed adjustments. This ensures perfect synchronisation between different manufacturing stages, preventing bottlenecks and optimising throughput for maximum productivity.",
     "media": "<iframe width='100%' height='450' src='https://www.youtube.com/embed/UAnSuj0zZ3Y' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' allowfullscreen></iframe>",
     "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com",
     "icon": "eyelogo3.svg",
@@ -93,7 +93,7 @@
     "topic": "fluid-dynamics",
     "title": "Gas Leakage Detection",
     "description": "<strong>Acoustic & Environmental Sensing:</strong><br><br>• Developing a low-cost ultrasonic array for leak detection and localisation.<br>• Tested indoors and outdoors (up to 30m).<br>• Integrated with mobile platforms for site inspection.",
-    "media": "<iframe width='100%' height='450' src='https://www.youtube.com/embed/UAnSuj0zZ3Y' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' allowfullscreen></iframe>",
+    "media": "<iframe src=\"https://drive.google.com/file/d/1k-pPmfHGlQuGDrFfAn0px_GVcSo2tNxa/preview\" width=\"100%\" height=\"480\" allow=\"autoplay\"></iframe>",
     "qrCode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com",
     "icon": "earlogo2.svg",
     "text": "Gas Leakage Detection",
